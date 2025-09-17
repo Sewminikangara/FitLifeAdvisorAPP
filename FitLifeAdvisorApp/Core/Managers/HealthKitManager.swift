@@ -2,9 +2,7 @@
 //  HealthKitManager.swift
 //  FitLifeAdvisorApp
 //
-//  Created by FitLife Team on 11/09/2025.
-//  Production-Ready HealthKit Integration
-//
+// created by Sewmini 010 on 2025-08-28.
 
 import Foundation
 import HealthKit

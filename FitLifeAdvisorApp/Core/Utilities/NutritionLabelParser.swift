@@ -2,7 +2,7 @@
 //  NutritionLabelParser.swift
 //  FitLifeAdvisorApp
 //
-//  Simple nutrition label text parser for unit tests and reuse.
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import Foundation

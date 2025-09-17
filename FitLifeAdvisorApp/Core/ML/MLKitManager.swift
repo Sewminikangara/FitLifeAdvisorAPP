@@ -1,9 +1,7 @@
 //
 //  MLKitManager.swift
 //  FitLifeAdvisorApp
-//
-//  ML Kit integration manager for fitness and nutrition features
-//
+// created by Sewmini 010 on 2025-08-28.
 
 import SwiftUI
 import AVFoundation

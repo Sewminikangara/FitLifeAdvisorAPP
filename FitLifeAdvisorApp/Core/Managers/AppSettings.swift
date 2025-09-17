@@ -2,8 +2,7 @@
 //  AppSettings.swift
 //  FitLifeAdvisorApp
 //
-//  App-wide settings management including dark mode
-//
+// created by Sewmini 010 on 2025-08-28.
 
 import SwiftUI
 import Combine

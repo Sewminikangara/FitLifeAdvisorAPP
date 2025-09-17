@@ -2,7 +2,7 @@
 //  DietPlanningManager.swift
 //  FitLifeAdvisorApp
 //
-//  Facade exposing meal plan and shopping list generation.
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import Foundation

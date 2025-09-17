@@ -1,9 +1,7 @@
 //
 //  WorkoutManager.swift
 //  FitLifeAdvisorApp
-//
-//  Created by FitLife Team on 11/09/2025.
-//  Production-Ready Workout Tracking with GPS, Timer & Activity Detection
+//created by Sewmini 010 on 2025-08-28.
 //
 
 import Foundation

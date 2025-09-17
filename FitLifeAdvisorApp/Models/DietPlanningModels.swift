@@ -2,8 +2,7 @@
 //  DietPlanningModels.swift
 //  FitLifeAdvisorApp
 //
-//  Basic models for meal plan generation and shopping list.
-//
+//  created by Sewmini 010 on 2025-08-28.
 
 import Foundation
 

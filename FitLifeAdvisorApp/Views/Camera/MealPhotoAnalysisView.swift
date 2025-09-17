@@ -2,7 +2,7 @@
 //  MealCameraView.swift
 //  FitLifeAdvisorApp
 //
-//  Dedicated meal photo analysis with camera and gallery options
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import SwiftUI

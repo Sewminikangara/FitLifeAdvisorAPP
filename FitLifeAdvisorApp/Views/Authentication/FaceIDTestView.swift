@@ -2,8 +2,7 @@
 //  FaceIDTestView.swift
 //  FitLifeAdvisorApp
 //
-//  Created by AI Assistant for debugging
-//
+//  created by Sewmini 010 on 2025-08-28.
 
 import SwiftUI
 import LocalAuthentication

@@ -2,7 +2,7 @@
 //  RecipeDiscoveryView.swift
 //  FitLifeAdvisorApp
 //
-//  AI-powered recipe discovery and meal planning
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import SwiftUI

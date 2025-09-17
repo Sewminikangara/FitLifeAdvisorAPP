@@ -2,7 +2,7 @@
 //  EmailService.swift
 //  FitLifeAdvisorApp
 //
-//  Email service for sending password reset links and other notifications
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import Foundation

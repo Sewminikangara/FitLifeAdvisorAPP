@@ -26,22 +26,6 @@ struct FoodItem: Identifiable, Codable, Equatable {
     }
 }
 
-struct NutritionInfo: Codable, Equatable {
-    let calories: Double
-    let protein: Double // grams
-    let carbs: Double   // grams
-    let fat: Double     // grams
-    let fiber: Double   // grams
-    let sugar: Double   // grams
-    let sodium: Double  // mg
-    let cholesterol: Double // mg
-    
-    // Computed properties for display
-    var caloriesFromProtein: Double { protein * 4 }
-    var caloriesFromCarbs: Double { carbs * 4 }
-    var caloriesFromFat: Double { fat * 9 }
-}
-
 struct PortionInfo: Codable, Equatable {
     let servingSize: String
     let weight: Double // grams
@@ -83,46 +67,6 @@ struct MealAnalysisResult {
     let totalNutrition: NutritionInfo
     let confidence: Float
     let analysisTime: Date
-}
-
-struct SavedMeal: Identifiable, Codable, Equatable {
-    let id = UUID()
-    let name: String
-    let image: Data? // Stored as Data for Core Data compatibility
-    let foodItems: [FoodItem]
-    let totalNutrition: NutritionInfo
-    let timestamp: Date
-    let mealType: MealType
-    
-    // Equatable conformance
-    static func == (lhs: SavedMeal, rhs: SavedMeal) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
-enum MealType: String, CaseIterable, Codable {
-    case breakfast = "Breakfast"
-    case lunch = "Lunch"
-    case dinner = "Dinner"
-    case snack = "Snack"
-    
-    var icon: String {
-        switch self {
-        case .breakfast: return "sun.rise.fill"
-        case .lunch: return "sun.max.fill"
-        case .dinner: return "moon.fill"
-        case .snack: return "heart.fill"
-        }
-    }
-    
-    var color: Color {
-        switch self {
-        case .breakfast: return .orange
-        case .lunch: return .yellow
-        case .dinner: return .purple
-        case .snack: return .pink
-        }
-    }
 }
 
 // MARK: - Analysis Error Types

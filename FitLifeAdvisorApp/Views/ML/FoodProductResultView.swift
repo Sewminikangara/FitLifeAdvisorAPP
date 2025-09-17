@@ -2,8 +2,7 @@
 //  FoodProductResultView.swift
 //  FitLifeAdvisorApp
 //
-//  Display scanned food product results with nutrition information
-//
+//  created by Sewmini 010 on 2025-08-28.
 
 import SwiftUI
 

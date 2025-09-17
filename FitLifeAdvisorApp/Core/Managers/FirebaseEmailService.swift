@@ -2,8 +2,7 @@
 //  FirebaseEmailService.swift
 //  FitLifeAdvisorApp
 //
-//  Real email service using Firebase Authentication
-//  Note: Firebase SDK needs to be added to project for real email functionality
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import Foundation
