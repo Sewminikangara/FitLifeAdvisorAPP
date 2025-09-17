@@ -76,7 +76,7 @@ struct PlannedMeal: Identifiable, Codable {
     let id = UUID()
     let name: String
     let description: String
-    let recipe: Recipe?
+    let recipe: MealRecipe?
     let ingredients: [PlannedIngredient]
     let nutrition: NutritionInfo
     let cookingTime: TimeInterval
@@ -144,7 +144,7 @@ enum IngredientCategory: String, CaseIterable, Codable {
     }
 }
 
-struct Recipe: Identifiable, Codable {
+struct MealRecipe: Identifiable, Codable {
     let id = UUID()
     let name: String
     let description: String
@@ -228,7 +228,7 @@ enum NutritionGoal: String, CaseIterable, Codable {
     }
 }
 
-struct MacroTargets {
+struct MacroTargets: Codable {
     let proteinPercent: Double
     let carbPercent: Double
     let fatPercent: Double
@@ -884,43 +884,43 @@ extension MealPlanManager {
             PlannedMeal(
                 name: "Protein Power Bowl",
                 description: "Greek yogurt with berries, nuts, and protein powder",
-                recipe: nil,
+                recipe: nil as MealRecipe?,
                 ingredients: [
-                    PlannedIngredient(name: "Greek Yogurt", amount: 200, unit: "g", category: .dairy, estimatedCost: 150, isOptional: false, substitutes: ["Regular Yogurt"]),
-                    PlannedIngredient(name: "Mixed Berries", amount: 100, unit: "g", category: .fruits, estimatedCost: 200, isOptional: false, substitutes: ["Banana"]),
-                    PlannedIngredient(name: "Almonds", amount: 30, unit: "g", category: .protein, estimatedCost: 180, isOptional: false, substitutes: ["Walnuts"]),
-                    PlannedIngredient(name: "Protein Powder", amount: 25, unit: "g", category: .protein, estimatedCost: 200, isOptional: true, substitutes: [])
+                    PlannedIngredient(name: "Greek Yogurt", amount: 200, unit: "g", category: IngredientCategory.dairy, estimatedCost: 150, isOptional: false, substitutes: ["Regular Yogurt"]),
+                    PlannedIngredient(name: "Mixed Berries", amount: 100, unit: "g", category: IngredientCategory.fruits, estimatedCost: 200, isOptional: false, substitutes: ["Banana"]),
+                    PlannedIngredient(name: "Almonds", amount: 30, unit: "g", category: IngredientCategory.protein, estimatedCost: 180, isOptional: false, substitutes: ["Walnuts"]),
+                    PlannedIngredient(name: "Protein Powder", amount: 25, unit: "g", category: IngredientCategory.protein, estimatedCost: 200, isOptional: true, substitutes: [])
                 ],
                 nutrition: NutritionInfo(calories: 420, protein: 35, carbs: 28, fat: 18, fiber: 8, sugar: 20, sodium: 120, cholesterol: 15),
                 cookingTime: 0,
                 prepTime: 300,
                 servings: 1,
-                mealType: .breakfast,
+                mealType: MealType.breakfast,
                 tags: ["high-protein", "quick", "healthy"],
-                imageURL: nil,
-                difficulty: .beginner
+                imageURL: nil as String?,
+                difficulty: MealPlan.DifficultyLevel.beginner
             ),
             
             // Balanced Breakfast
             PlannedMeal(
                 name: "Overnight Oats with Fruits",
                 description: "Nutritious overnight oats with seasonal fruits",
-                recipe: nil,
+                recipe: nil as MealRecipe?,
                 ingredients: [
-                    PlannedIngredient(name: "Rolled Oats", amount: 50, unit: "g", category: .grains, estimatedCost: 40, isOptional: false, substitutes: ["Steel Cut Oats"]),
-                    PlannedIngredient(name: "Milk", amount: 200, unit: "ml", category: .dairy, estimatedCost: 60, isOptional: false, substitutes: ["Almond Milk"]),
-                    PlannedIngredient(name: "Banana", amount: 1, unit: "piece", category: .fruits, estimatedCost: 30, isOptional: false, substitutes: ["Apple"]),
-                    PlannedIngredient(name: "Chia Seeds", amount: 15, unit: "g", category: .pantry, estimatedCost: 100, isOptional: true, substitutes: ["Flax Seeds"]),
-                    PlannedIngredient(name: "Honey", amount: 10, unit: "g", category: .pantry, estimatedCost: 25, isOptional: true, substitutes: ["Maple Syrup"])
+                    PlannedIngredient(name: "Rolled Oats", amount: 50, unit: "g", category: IngredientCategory.grains, estimatedCost: 40, isOptional: false, substitutes: ["Steel Cut Oats"]),
+                    PlannedIngredient(name: "Milk", amount: 200, unit: "ml", category: IngredientCategory.dairy, estimatedCost: 60, isOptional: false, substitutes: ["Almond Milk"]),
+                    PlannedIngredient(name: "Banana", amount: 1, unit: "piece", category: IngredientCategory.fruits, estimatedCost: 30, isOptional: false, substitutes: ["Apple"]),
+                    PlannedIngredient(name: "Chia Seeds", amount: 15, unit: "g", category: IngredientCategory.pantry, estimatedCost: 100, isOptional: true, substitutes: ["Flax Seeds"]),
+                    PlannedIngredient(name: "Honey", amount: 10, unit: "g", category: IngredientCategory.pantry, estimatedCost: 25, isOptional: true, substitutes: ["Maple Syrup"])
                 ],
                 nutrition: NutritionInfo(calories: 380, protein: 15, carbs: 65, fat: 8, fiber: 10, sugar: 25, sodium: 85, cholesterol: 5),
                 cookingTime: 0,
                 prepTime: 600,
                 servings: 1,
-                mealType: .breakfast,
+                mealType: MealType.breakfast,
                 tags: ["fiber-rich", "make-ahead", "vegetarian"],
-                imageURL: nil,
-                difficulty: .beginner
+                imageURL: nil as String?,
+                difficulty: MealPlan.DifficultyLevel.beginner
             )
         ]
     }
@@ -931,23 +931,23 @@ extension MealPlanManager {
             PlannedMeal(
                 name: "Grilled Chicken Salad",
                 description: "Fresh mixed greens with grilled chicken and quinoa",
-                recipe: nil,
+                recipe: nil as MealRecipe?,
                 ingredients: [
-                    PlannedIngredient(name: "Chicken Breast", amount: 150, unit: "g", category: .protein, estimatedCost: 400, isOptional: false, substitutes: ["Turkey Breast"]),
-                    PlannedIngredient(name: "Mixed Greens", amount: 100, unit: "g", category: .vegetables, estimatedCost: 120, isOptional: false, substitutes: ["Spinach"]),
-                    PlannedIngredient(name: "Quinoa", amount: 80, unit: "g", category: .grains, estimatedCost: 150, isOptional: false, substitutes: ["Brown Rice"]),
-                    PlannedIngredient(name: "Cherry Tomatoes", amount: 100, unit: "g", category: .vegetables, estimatedCost: 80, isOptional: false, substitutes: ["Regular Tomatoes"]),
-                    PlannedIngredient(name: "Olive Oil", amount: 15, unit: "ml", category: .oils, estimatedCost: 30, isOptional: false, substitutes: []),
-                    PlannedIngredient(name: "Lemon", amount: 0.5, unit: "piece", category: .fruits, estimatedCost: 20, isOptional: false, substitutes: ["Lime"])
+                    PlannedIngredient(name: "Chicken Breast", amount: 150, unit: "g", category: IngredientCategory.protein, estimatedCost: 400, isOptional: false, substitutes: ["Turkey Breast"]),
+                    PlannedIngredient(name: "Mixed Greens", amount: 100, unit: "g", category: IngredientCategory.vegetables, estimatedCost: 120, isOptional: false, substitutes: ["Spinach"]),
+                    PlannedIngredient(name: "Quinoa", amount: 80, unit: "g", category: IngredientCategory.grains, estimatedCost: 150, isOptional: false, substitutes: ["Brown Rice"]),
+                    PlannedIngredient(name: "Cherry Tomatoes", amount: 100, unit: "g", category: IngredientCategory.vegetables, estimatedCost: 80, isOptional: false, substitutes: ["Regular Tomatoes"]),
+                    PlannedIngredient(name: "Olive Oil", amount: 15, unit: "ml", category: IngredientCategory.oils, estimatedCost: 30, isOptional: false, substitutes: []),
+                    PlannedIngredient(name: "Lemon", amount: 0.5, unit: "piece", category: IngredientCategory.fruits, estimatedCost: 20, isOptional: false, substitutes: ["Lime"])
                 ],
                 nutrition: NutritionInfo(calories: 520, protein: 42, carbs: 35, fat: 22, fiber: 6, sugar: 8, sodium: 180, cholesterol: 75),
                 cookingTime: 900,
                 prepTime: 600,
                 servings: 1,
-                mealType: .lunch,
+                mealType: MealType.lunch,
                 tags: ["high-protein", "gluten-free", "balanced"],
-                imageURL: nil,
-                difficulty: .intermediate
+                imageURL: nil as String?,
+                difficulty: MealPlan.DifficultyLevel.intermediate
             ),
             
             // Vegetarian Lunch
