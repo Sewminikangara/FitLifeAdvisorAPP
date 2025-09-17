@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- HealthKit Integration -->
+    <key>NSHealthShareUsageDescription</key>
+    <string>FitLife needs access to your health data to provide personalized fitness recommendations and track your progress accurately.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>FitLife will save your workout data and nutrition information to Apple Health for comprehensive health tracking.</string>
+    
+    <!-- Location Services for Workout Tracking -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>FitLife uses your location to track outdoor workouts like running, cycling, and hiking with GPS accuracy.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>FitLife uses your location to automatically detect workouts and provide location-based fitness insights.</string>
+    
+    <!-- Motion & Fitness -->
+    <key>NSMotionUsageDescription</key>
+    <string>FitLife uses motion sensors to automatically detect workouts and count steps for accurate activity tracking.</string>
+    
+    <!-- Camera for Meal Analysis -->
+    <key>NSCameraUsageDescription</key>
+    <string>FitLife uses the camera to analyze your meals and provide accurate nutrition information.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>FitLife can analyze photos from your library to log meals and track nutrition.</string>
+    
+    <!-- Background Modes for Continuous Tracking -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>background-processing</string>
+        <string>location</string>
+        <string>background-fetch</string>
+    </array>
+    
+    <!-- Required Device Capabilities -->
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>healthkit</string>
+        <string>location-services</string>
+    </array>
+</dict>
+</plist>
