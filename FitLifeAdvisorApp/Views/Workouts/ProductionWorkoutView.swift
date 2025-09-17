@@ -23,6 +23,16 @@ struct ProductionWorkoutView: View {
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
+
+    // Quick-start support
+    private let initialWorkoutType: HKWorkoutActivityType?
+    private let autoStart: Bool
+
+    init(initialWorkoutType: HKWorkoutActivityType? = nil, autoStart: Bool = false) {
+        self._selectedWorkoutType = State(initialValue: initialWorkoutType ?? .running)
+        self.initialWorkoutType = initialWorkoutType
+        self.autoStart = autoStart
+    }
     
     var body: some View {
         NavigationView {
@@ -229,14 +239,22 @@ struct ProductionWorkoutView: View {
             if !healthKitManager.isAuthorized {
                 try? await healthKitManager.requestAuthorization()
             }
-            
+
             if workoutManager.locationPermissionStatus == .notDetermined {
                 workoutManager.requestLocationPermission()
             }
-            
+
             // Load data
             await healthKitManager.loadAllHealthData()
             await recommendationEngine.analyzeUserData()
+
+            // Auto-start if requested and authorized
+            if autoStart, let type = initialWorkoutType, workoutManager.workoutState == .idle, healthKitManager.isAuthorized {
+                await MainActor.run {
+                    selectedWorkoutType = type
+                    startWorkout(type)
+                }
+            }
         }
     }
     

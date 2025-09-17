@@ -40,6 +40,7 @@ struct ProfileView: View {
         .sheet(isPresented: $showingSettings) {
             ModernSettingsView()
                 .environmentObject(authManager)
+                .environmentObject(AppSettings.shared)
         }
         .sheet(isPresented: $showingPersonalInfo) {
             ModernPersonalInfoView()

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import HealthKit
+import UIKit
 
 struct LuxuryLogView: View {
     @State private var showingSmartCamera = false
@@ -14,6 +16,8 @@ struct LuxuryLogView: View {
     @State private var showingWaterLogger = false
     @State private var showingMoodLogger = false
     @State private var showingHealthyPlaces = false
+    @State private var showingWorkoutQuickStart = false
+    @State private var quickStartType: HKWorkoutActivityType = .running
     @State private var animateCards = false
     @StateObject private var mealAnalysisManager = MealAnalysisManager.shared
     
@@ -60,8 +64,8 @@ struct LuxuryLogView: View {
                                 .padding(.top, LuxuryTheme.Spacing.xLarge)
                         }
                         
-                        // Bottom spacing
-                        Color.clear.frame(height: 120)
+                        // Bottom spacing (reduced to fit smaller screens)
+                        Color.clear.frame(height: 60)
                     }
                 }
             }
@@ -75,6 +79,9 @@ struct LuxuryLogView: View {
         }
         .sheet(isPresented: $showingWorkoutLogger) {
             LuxuryWorkoutLoggerView()
+        }
+        .fullScreenCover(isPresented: $showingWorkoutQuickStart) {
+            ProductionWorkoutView(initialWorkoutType: quickStartType, autoStart: true)
         }
         .sheet(isPresented: $showingWeightLogger) {
             LuxuryWeightLoggerView()
@@ -95,7 +102,7 @@ struct LuxuryLogView: View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Smart Logging")
+                    Text(" Logging")
                         .font(LuxuryTheme.Typography.title1)
                         .foregroundColor(LuxuryTheme.Colors.primaryText)
                     
@@ -213,6 +220,42 @@ struct LuxuryLogView: View {
             }
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: LuxuryTheme.Spacing.small), count: 2), spacing: LuxuryTheme.Spacing.small) {
+                // Run quick start
+                LuxuryQuickActionCard(
+                    title: "Run",
+                    subtitle: "Start now",
+                    icon: "figure.run",
+                    colors: [LuxuryTheme.Colors.workoutPurple, LuxuryTheme.Colors.workoutViolet],
+                    action: {
+                        quickStartType = .running
+                        showingWorkoutQuickStart = true
+                    }
+                )
+
+                // Walk quick start
+                LuxuryQuickActionCard(
+                    title: "Walk",
+                    subtitle: "Start now",
+                    icon: "figure.walk",
+                    colors: [LuxuryTheme.Colors.scanTeal, LuxuryTheme.Colors.scanGreen],
+                    action: {
+                        quickStartType = .walking
+                        showingWorkoutQuickStart = true
+                    }
+                )
+
+                // Cycle quick start
+                LuxuryQuickActionCard(
+                    title: "Cycle",
+                    subtitle: "Start now",
+                    icon: "bicycle",
+                    colors: [Color(hex: "03A9F4"), Color(hex: "0288D1")],
+                    action: {
+                        quickStartType = .cycling
+                        showingWorkoutQuickStart = true
+                    }
+                )
+
                 LuxuryQuickActionCard(
                     title: "Workout",
                     subtitle: "Log Exercise",
@@ -259,7 +302,13 @@ struct LuxuryLogView: View {
                     icon: "ellipsis.circle.fill",
                     colors: [LuxuryTheme.Colors.goldPrimary, LuxuryTheme.Colors.goldSecondary],
                     action: { 
-                        // Will navigate to More tab - simplified implementation
+                        // Navigate to All Screens hub
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let window = windowScene.windows.first,
+                           let root = window.rootViewController {
+                            let hosting = UIHostingController(rootView: AllScreensView())
+                            root.present(hosting, animated: true, completion: nil)
+                        }
                     }
                 )
             }

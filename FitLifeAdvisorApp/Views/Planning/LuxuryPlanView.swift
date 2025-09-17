@@ -10,9 +10,7 @@ import SwiftUI
 struct LuxuryPlanView: View {
     @State private var selectedTab: PlanningTab = .meals
     @State private var selectedWeek = Date()
-    @State private var showingMealPlanner = false
-    @State private var showingWorkoutPlanner = false
-    @State private var showingGoalSetter = false
+    @State private var activeSheet: ActiveSheet?
     @State private var animateCards = false
     
     enum PlanningTab: String, CaseIterable {
@@ -34,6 +32,14 @@ struct LuxuryPlanView: View {
             case .workouts: return [LuxuryTheme.Colors.workoutPurple, LuxuryTheme.Colors.workoutViolet]
             case .goals: return [LuxuryTheme.Colors.goldPrimary, LuxuryTheme.Colors.goldSecondary]
             }
+        }
+    }
+    
+    // Single sheet controller
+    enum ActiveSheet: Identifiable {
+        case mealPlanner, workoutPlanner, goalSetter
+        var id: String {
+            switch self { case .mealPlanner: return "mealPlanner"; case .workoutPlanner: return "workoutPlanner"; case .goalSetter: return "goalSetter" }
         }
     }
     
@@ -86,14 +92,15 @@ struct LuxuryPlanView: View {
         .onAppear {
             startAnimations()
         }
-        .sheet(isPresented: $showingMealPlanner) {
-            LuxuryMealPlannerView()
-        }
-        .sheet(isPresented: $showingWorkoutPlanner) {
-            LuxuryWorkoutPlannerView()
-        }
-        .sheet(isPresented: $showingGoalSetter) {
-            LuxuryGoalSetterView()
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .mealPlanner:
+                LuxuryMealPlannerView()
+            case .workoutPlanner:
+                LuxuryWorkoutPlannerView()
+            case .goalSetter:
+                LuxuryGoalSetterView()
+            }
         }
     }
     
@@ -176,7 +183,7 @@ struct LuxuryPlanView: View {
                     
                     Spacer()
                     
-                    Button(action: {}) {
+                    Button(action: { activeSheet = .mealPlanner }) {
                         VStack(spacing: 4) {
                             Image(systemName: "wand.and.stars")
                                 .font(.system(size: 24, weight: .bold))
@@ -273,9 +280,7 @@ struct LuxuryPlanView: View {
                 
                 Spacer()
                 
-                Button("Plan Week") {
-                    showingMealPlanner = true
-                }
+                Button("Plan Week") { activeSheet = .mealPlanner }
                 .font(LuxuryTheme.Typography.caption)
                 .foregroundColor(LuxuryTheme.Colors.nutritionRed)
             }
@@ -317,9 +322,7 @@ struct LuxuryPlanView: View {
                 
                 Spacer()
                 
-                Button("Plan Week") {
-                    showingWorkoutPlanner = true
-                }
+                Button("Plan Week") { activeSheet = .workoutPlanner }
                 .font(LuxuryTheme.Typography.caption)
                 .foregroundColor(LuxuryTheme.Colors.workoutPurple)
             }
@@ -361,9 +364,7 @@ struct LuxuryPlanView: View {
                 
                 Spacer()
                 
-                Button("Set Goals") {
-                    showingGoalSetter = true
-                }
+                Button("Set Goals") { activeSheet = .goalSetter }
                 .font(LuxuryTheme.Typography.caption)
                 .foregroundColor(LuxuryTheme.Colors.goldPrimary)
             }
@@ -416,7 +417,7 @@ struct LuxuryPlanView: View {
                     subtitle: "Plan & Prepare",
                     icon: "chef.fill",
                     colors: [LuxuryTheme.Colors.recipePink, LuxuryTheme.Colors.recipeRed],
-                    action: { showingMealPlanner = true }
+                    action: { activeSheet = .mealPlanner }
                 )
                 
                 LuxuryQuickActionCard(
@@ -424,7 +425,7 @@ struct LuxuryPlanView: View {
                     subtitle: "AI Generated",
                     icon: "brain.head.profile",
                     colors: [LuxuryTheme.Colors.aiBlue, LuxuryTheme.Colors.aiBlueSecondary],
-                    action: {}
+                    action: { activeSheet = .mealPlanner }
                 )
             }
         }
@@ -717,36 +718,84 @@ struct LuxuryGoalSetterView: View {
 
 struct LuxuryMealPlannerView: View {
     @Environment(\.dismiss) var dismiss
+    @StateObject private var planning = DietPlanningManager()
+    @State private var preference: DietaryPreference = .balanced
     
     var body: some View {
         NavigationView {
-            ZStack {
-                LuxuryTheme.Gradients.primaryBackground
-                    .ignoresSafeArea()
-                
-                VStack(spacing: LuxuryTheme.Spacing.xLarge) {
-                    Image(systemName: "calendar.badge.plus")
-                        .font(.system(size: 80))
-                        .foregroundColor(LuxuryTheme.Colors.goldPrimary)
+            VStack(spacing: 16) {
+                Form {
+                    Section(header: Text("Preferences")) {
+                        Picker("Diet", selection: $preference) {
+                            ForEach(DietaryPreference.allCases) { pref in
+                                Text(pref.displayName).tag(pref)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
                     
-                    Text("Meal Planner")
-                        .font(LuxuryTheme.Typography.title1)
-                        .foregroundColor(LuxuryTheme.Colors.primaryText)
-                    
-                    Text("AI-powered meal planning coming soon")
-                        .font(LuxuryTheme.Typography.body)
-                        .foregroundColor(LuxuryTheme.Colors.secondaryText)
-                        .multilineTextAlignment(.center)
+                    Section(header: Text("Actions")) {
+                        Button {
+                            planning.generate(preference: preference)
+                        } label: {
+                            Label("Generate Weekly Plan", systemImage: "wand.and.stars")
+                        }
+                        .accessibilityLabel("Generate weekly plan")
+                        
+                        if let plan = planning.weeklyPlan {
+                            NavigationLink(destination: MealPlanDetailsView(plan: plan)) {
+                                Label("View Plan", systemImage: "calendar")
+                            }
+                        }
+                        if let list = planning.shoppingList, planning.weeklyPlan != nil {
+                            NavigationLink(destination: ShoppingListView(list: list)) {
+                                Label("Shopping List", systemImage: "cart")
+                            }
+                        }
+                    }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Meal Planner")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
-                        .foregroundColor(LuxuryTheme.Colors.goldPrimary)
                 }
             }
         }
+    }
+}
+
+struct MealPlanDetailsView: View {
+    let plan: WeeklyMealPlan
+    private let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        return f
+    }()
+    
+    var body: some View {
+        List {
+            ForEach(plan.days) { day in
+                Section(header: Text(dateFormatter.string(from: day.date))) {
+                    ForEach(day.meals) { pm in
+                        HStack {
+                            Text(pm.slot.displayName)
+                                .fontWeight(.semibold)
+                            Spacer()
+                            VStack(alignment: .trailing) {
+                                Text(pm.recipe.name)
+                                Text("\(pm.recipe.calories) kcal")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("\(pm.slot.displayName): \(pm.recipe.name), \(pm.recipe.calories) calories")
+                    }
+                }
+            }
+        }
+        .navigationTitle("Weekly Plan")
     }
 }
 

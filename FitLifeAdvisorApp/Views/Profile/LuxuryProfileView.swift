@@ -74,8 +74,9 @@ struct LuxuryProfileView: View {
             startAnimations()
         }
         .sheet(isPresented: $showingSettings) {
-            LuxurySettingsView()
+            ModernSettingsView()
                 .environmentObject(authManager)
+                .environmentObject(AppSettings.shared)
         }
         .sheet(isPresented: $showingPersonalInfo) {
             LuxuryPersonalInfoView()

@@ -1,0 +1,35 @@
+disabled_rules:
+  - trailing_whitespace
+  - redundant_string_enum_value
+
+opt_in_rules:
+  - empty_count
+  - first_where
+  - fatal_error_message
+
+line_length:
+  warning: 140
+  error: 200
+  ignores_function_declarations: true
+  ignores_comments: true
+
+identifier_name:
+  min_length: 2
+  excluded: [id, x, y]
+
+type_name:
+  max_length:
+    warning: 50
+    error: 60
+
+force_cast: warning
+force_try: warning
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+excluded:
+  - FitLifeAdvisorApp.xcodeproj
+  - FitLifeAdvisorApp.xcworkspace
+  - FitLifeAdvisorApp/Generated
+  - FitLifeAdvisorApp/Assets.xcassets

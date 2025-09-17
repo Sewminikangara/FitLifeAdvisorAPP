@@ -9,6 +9,7 @@ import SwiftUI
 struct AuthenticationView: View {
     @State private var isSignUp = false
     @State private var showBiometricLogin = false
+    @State private var showForgotPassword = false
     @EnvironmentObject var authManager: AuthenticationManager
     @Environment(\.dismiss) var dismiss
     
@@ -126,6 +127,7 @@ struct AuthenticationView: View {
 struct LoginFormView: View {
     @State private var email = ""
     @State private var password = ""
+    @State private var showForgotPassword = false
     @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
@@ -181,13 +183,16 @@ struct LoginFormView: View {
                 }
                 
                 Button("Forgot Password?") {
-                    // TODO: Implement forgot password
+                    showForgotPassword = true
                 }
                 .font(Constants.Typography.caption)
                 .foregroundColor(Constants.Colors.primaryBlue)
             }
         }
         .padding(.horizontal, Constants.Spacing.large)
+        .sheet(isPresented: $showForgotPassword) {
+            LuxuryForgotPasswordView()
+        }
     }
 }
 

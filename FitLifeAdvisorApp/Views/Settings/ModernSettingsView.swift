@@ -2,15 +2,13 @@
 //  ModernSettingsView.swift
 
 import SwiftUI
+import UIKit
 
 struct ModernSettingsView: View {
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var appSettings: AppSettings
     @Environment(\.dismiss) var dismiss
     @State private var showingLogoutAlert = false
-    @State private var darkModeEnabled = false
-    @State private var notificationsEnabled = true
-    @State private var biometricEnabled = true
-    @State private var analyticsEnabled = true
     
     var body: some View {
         NavigationView {
@@ -31,7 +29,7 @@ struct ModernSettingsView: View {
                                 title: "Dark Mode",
                                 subtitle: "Switch between light and dark themes",
                                 icon: "moon.fill",
-                                isOn: $darkModeEnabled
+                                isOn: $appSettings.isDarkMode
                             )
                             
                             SettingsNavigationRow(
@@ -39,6 +37,66 @@ struct ModernSettingsView: View {
                                 subtitle: "Choose your favorite app icon",
                                 icon: "app.fill",
                                 action: { /* TODO: App icon selection */ }
+                            )
+                            
+                            SettingsNavigationRow(
+                                title: "Dark Mode Test",
+                                subtitle: "Test dark mode functionality",
+                                icon: "moon.stars",
+                                action: { 
+                                    // Open dark mode test view
+                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                       let window = windowScene.windows.first,
+                                       let root = window.rootViewController {
+                                        let hosting = UIHostingController(rootView: DarkModeTestView().environmentObject(appSettings))
+                                        root.present(hosting, animated: true, completion: nil)
+                                    }
+                                }
+                            )
+                            
+                            SettingsNavigationRow(
+                                title: "Face ID Simulator Guide",
+                                subtitle: "Setup and test Face ID in simulator",
+                                icon: "faceid",
+                                action: { 
+                                    // Open Face ID simulator guide
+                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                       let window = windowScene.windows.first,
+                                       let root = window.rootViewController {
+                                        let hosting = UIHostingController(rootView: FaceIDSimulatorGuide().environmentObject(authManager))
+                                        root.present(hosting, animated: true, completion: nil)
+                                    }
+                                }
+                            )
+                            
+                            SettingsNavigationRow(
+                                title: "Enable Real Emails",
+                                subtitle: "Send actual emails to sewminikangara1@gmail.com",
+                                icon: "envelope.fill",
+                                action: { 
+                                    // Open real email setup guide
+                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                       let window = windowScene.windows.first,
+                                       let root = window.rootViewController {
+                                        let hosting = UIHostingController(rootView: RealEmailSetupGuide())
+                                        root.present(hosting, animated: true, completion: nil)
+                                    }
+                                }
+                            )
+                            
+                            SettingsNavigationRow(
+                                title: "Email Integration Guide",
+                                subtitle: "Technical documentation",
+                                icon: "envelope.badge",
+                                action: { 
+                                    // Open email integration guide
+                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                       let window = windowScene.windows.first,
+                                       let root = window.rootViewController {
+                                        let hosting = UIHostingController(rootView: ForgotPasswordIntegrationGuide())
+                                        root.present(hosting, animated: true, completion: nil)
+                                    }
+                                }
                             )
                         }
                         
@@ -52,9 +110,9 @@ struct ModernSettingsView: View {
                                 title: "Biometric Authentication",
                                 subtitle: "Use Face ID or Touch ID",
                                 icon: authManager.checkBiometricAvailability() == .faceID ? "faceid" : "touchid",
-                                isOn: $biometricEnabled
+                                isOn: $appSettings.biometricEnabled
                             ) {
-                                if biometricEnabled {
+                                if appSettings.biometricEnabled {
                                     authManager.enableBiometricAuthentication()
                                 } else {
                                     authManager.disableBiometricAuthentication()
@@ -72,7 +130,7 @@ struct ModernSettingsView: View {
                                 title: "Analytics",
                                 subtitle: "Help improve FitLife with anonymous data",
                                 icon: "chart.bar.fill",
-                                isOn: $analyticsEnabled
+                                isOn: $appSettings.analyticsEnabled
                             )
                         }
                         
@@ -86,7 +144,7 @@ struct ModernSettingsView: View {
                                 title: "Push Notifications",
                                 subtitle: "Receive meal and workout reminders",
                                 icon: "bell.badge.fill",
-                                isOn: $notificationsEnabled
+                                isOn: $appSettings.notificationsEnabled
                             )
                             
                             SettingsNavigationRow(
@@ -382,4 +440,5 @@ struct SettingsNavigationRow: View {
 #Preview {
     ModernSettingsView()
         .environmentObject(AuthenticationManager())
+        .environmentObject(AppSettings.shared)
 }

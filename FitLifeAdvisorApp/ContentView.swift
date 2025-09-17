@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var selectedTab = 0
     @State private var showFaceIDTest = false
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var appSettings: AppSettings
     
     var body: some View {
         ZStack {
@@ -237,21 +238,35 @@ struct LuxuryMoreView: View {
                                 )
                             }
                             
-                            // Settings (Future)
-                            LuxuryMoreCard(
-                                title: "Settings",
-                                subtitle: "App preferences and configuration",
-                                icon: "gearshape",
-                                color: LuxuryTheme.Colors.goldSecondary
-                            )
+                            // Settings
+                            NavigationLink(destination: ModernSettingsView()) {
+                                LuxuryMoreCard(
+                                    title: "Settings",
+                                    subtitle: "App preferences and configuration",
+                                    icon: "gearshape",
+                                    color: LuxuryTheme.Colors.goldSecondary
+                                )
+                            }
                             
-                            // Help & Support (Future)
-                            LuxuryMoreCard(
-                                title: "Help & Support",
-                                subtitle: "Get help and contact support",
-                                icon: "questionmark.circle",
-                                color: LuxuryTheme.Colors.goldSecondary
-                            )
+                            // Help & Support
+                            NavigationLink(destination: HelpSupportView()) {
+                                LuxuryMoreCard(
+                                    title: "Help & Support",
+                                    subtitle: "Get help and contact support",
+                                    icon: "questionmark.circle",
+                                    color: LuxuryTheme.Colors.goldSecondary
+                                )
+                            }
+
+                            // All Screens (Navigation Hub)
+                            NavigationLink(destination: AllScreensView()) {
+                                LuxuryMoreCard(
+                                    title: "All Screens",
+                                    subtitle: "Explore every page quickly",
+                                    icon: "square.grid.2x2",
+                                    color: LuxuryTheme.Colors.aiBlue
+                                )
+                            }
                         }
                         .padding(.horizontal, LuxuryTheme.Spacing.medium)
                         

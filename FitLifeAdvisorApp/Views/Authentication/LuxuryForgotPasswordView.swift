@@ -142,19 +142,38 @@ struct LuxuryForgotPasswordView: View {
                 .frame(height: 56)
                 .background(
                     RoundedRectangle(cornerRadius: LuxuryTheme.CornerRadius.large)
-                        .fill(email.contains("@") ? LuxuryTheme.Gradients.goldGradient : LinearGradient(colors: [LuxuryTheme.Colors.tertiaryText], startPoint: .leading, endPoint: .trailing))
-                        .shadow(color: email.contains("@") ? LuxuryTheme.Colors.goldPrimary.opacity(0.3) : .clear, radius: 10, x: 0, y: 4)
+                        .fill(isValidEmail(email) ? LuxuryTheme.Gradients.goldGradient : LinearGradient(colors: [LuxuryTheme.Colors.tertiaryText], startPoint: .leading, endPoint: .trailing))
+                        .shadow(color: isValidEmail(email) ? LuxuryTheme.Colors.goldPrimary.opacity(0.3) : .clear, radius: 10, x: 0, y: 4)
                 )
             }
-            .disabled(!email.contains("@") || isLoading)
+            .disabled(!isValidEmail(email) || isLoading)
             .buttonStyle(PressButtonStyle())
             
             // Error Message
             if !errorMessage.isEmpty {
-                Text(errorMessage)
-                    .font(LuxuryTheme.Typography.caption)
+                VStack(spacing: LuxuryTheme.Spacing.small) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.caption)
+                        Text(errorMessage)
+                            .font(LuxuryTheme.Typography.caption)
+                    }
                     .foregroundColor(LuxuryTheme.Colors.nutritionRed)
-                    .padding(.top, LuxuryTheme.Spacing.small)
+                    
+                    if errorMessage.contains("not found") {
+                        Text("Double-check your email address or create a new account")
+                            .font(LuxuryTheme.Typography.caption2)
+                            .foregroundColor(LuxuryTheme.Colors.secondaryText)
+                            .multilineTextAlignment(.center)
+                    } else if errorMessage.contains("Network") {
+                        Text("Check your internet connection and try again")
+                            .font(LuxuryTheme.Typography.caption2)
+                            .foregroundColor(LuxuryTheme.Colors.secondaryText)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .padding(.top, LuxuryTheme.Spacing.small)
+                .padding(.horizontal, LuxuryTheme.Spacing.medium)
             }
         }
     }
@@ -229,21 +248,34 @@ struct LuxuryForgotPasswordView: View {
         }
     }
     
+    private func isValidEmail(_ email: String) -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: email)
+    }
+    
     private func sendResetLinkAction() {
         isLoading = true
         errorMessage = ""
         
-        // Simulate API call
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            isLoading = false
-            
-            // Simulate success (replace with real API call)
-            if email.contains("@") {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                    showSuccessMessage = true
+        // Use the real email service
+        EmailService.shared.sendPasswordResetEmail(to: email) { result in
+            DispatchQueue.main.async {
+                isLoading = false
+                
+                switch result {
+                case .success():
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                        showSuccessMessage = true
+                    }
+                    
+                case .failure(let error):
+                    errorMessage = error.localizedDescription
+                    
+                    // Add haptic feedback for error
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                    impactFeedback.impactOccurred()
                 }
-            } else {
-                errorMessage = "Please enter a valid email address"
             }
         }
     }

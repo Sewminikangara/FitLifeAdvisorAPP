@@ -179,7 +179,7 @@ struct LuxuryDashboardView: View {
                             .font(.title2)
                             .foregroundColor(Color(hex: "00E5FF"))
                         
-                        Text("AI Health Score")
+                        Text("Health Score")
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.white)
                     }

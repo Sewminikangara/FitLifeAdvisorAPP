@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DC06BC932E7ACB78001284BD /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = DC06BC922E7ACB78001284BD /* FirebaseAI */; };
+		DC06BC952E7ACB78001284BD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DC06BC942E7ACB78001284BD /* FirebaseAnalytics */; };
+		DC06BC972E7ACB78001284BD /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = DC06BC962E7ACB78001284BD /* FirebaseAnalyticsCore */; };
+		DC06BC992E7ACB78001284BD /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = DC06BC982E7ACB78001284BD /* FirebaseAnalyticsIdentitySupport */; };
+		DC06BC9B2E7ACB78001284BD /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = DC06BC9A2E7ACB78001284BD /* FirebaseAppCheck */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		DC33FD202E600C3300517FB0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +73,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC06BC992E7ACB78001284BD /* FirebaseAnalyticsIdentitySupport in Frameworks */,
+				DC06BC952E7ACB78001284BD /* FirebaseAnalytics in Frameworks */,
+				DC06BC972E7ACB78001284BD /* FirebaseAnalyticsCore in Frameworks */,
+				DC06BC9B2E7ACB78001284BD /* FirebaseAppCheck in Frameworks */,
+				DC06BC932E7ACB78001284BD /* FirebaseAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +138,11 @@
 			);
 			name = FitLifeAdvisorApp;
 			packageProductDependencies = (
+				DC06BC922E7ACB78001284BD /* FirebaseAI */,
+				DC06BC942E7ACB78001284BD /* FirebaseAnalytics */,
+				DC06BC962E7ACB78001284BD /* FirebaseAnalyticsCore */,
+				DC06BC982E7ACB78001284BD /* FirebaseAnalyticsIdentitySupport */,
+				DC06BC9A2E7ACB78001284BD /* FirebaseAppCheck */,
 			);
 			productName = FitLifeAdvisorApp;
 			productReference = DC33FD0A2E600C3200517FB0 /* FitLifeAdvisorApp.app */;
@@ -208,6 +226,10 @@
 			);
 			mainGroup = DC33FD012E600C3200517FB0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DC06BC8E2E7AC398001284BD /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DC33FD0B2E600C3200517FB0 /* Products */;
 			projectDirPath = "";
@@ -581,6 +603,53 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DC06BC8E2E7AC398001284BD /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+		DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DC06BC922E7ACB78001284BD /* FirebaseAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAI;
+		};
+		DC06BC942E7ACB78001284BD /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		DC06BC962E7ACB78001284BD /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		DC06BC982E7ACB78001284BD /* FirebaseAnalyticsIdentitySupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsIdentitySupport;
+		};
+		DC06BC9A2E7ACB78001284BD /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC06BC912E7AC9EA001284BD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DC33FD022E600C3200517FB0 /* Project object */;
 }
