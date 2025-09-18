@@ -2,7 +2,7 @@
 //  LuxuryTheme.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Luxury Design System for the entire app
 //
 
 import SwiftUI

@@ -2,11 +2,12 @@
 //  AccessibilityHelpers.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Lightweight helpers to make adding accessibility consistent and easy.
+//
 
 import SwiftUI
 
-//Accessibility IDs for testing & VoiceOver
+// MARK: - Accessibility IDs for testing & VoiceOver
 enum AXID {
     // Common
     static let primaryActionButton = "ax.primaryActionButton"
@@ -18,7 +19,7 @@ enum AXID {
     static let notificationBanner = "ax.notificationBanner"
 }
 
-//View helpers
+// MARK: - View helpers
 extension View {
     /// Apply common accessibility modifiers for buttons in one place
     func accessibleButton(label: String, hint: String? = nil) -> some View {

@@ -2,13 +2,12 @@
 //  FoodRecognitionService.swift
 //  FitLifeAdvisorApp
 //
-// created by Sewmini 010 on 2025-08-28.
 //
 
 import SwiftUI
 import Foundation
 
-// MARK: - Food Recognition Service
+// Food Recognition Service
 @MainActor
 class FoodRecognitionService: ObservableObject {
     @Published var isLoading = false
@@ -18,14 +17,13 @@ class FoodRecognitionService: ObservableObject {
     
     private let mlKitManager = MLKitManager()
     
-    // MARK: - Barcode to Food Product
+    // Barcode to Food Product
     func fetchFoodProduct(barcode: String) async {
         isLoading = true
         errorMessage = nil
         
         do {
             // Simulate API call to nutrition database
-            // In real app, use APIs like OpenFoodFacts, USDA, or Spoonacular
             let product = await mockFoodProductAPI(barcode: barcode)
             
             DispatchQueue.main.async {
@@ -42,7 +40,7 @@ class FoodRecognitionService: ObservableObject {
         }
     }
     
-    // MARK: - Scan Nutrition Label
+    // Scan Nutrition Label
     func scanNutritionLabel(image: UIImage) {
         isLoading = true
         errorMessage = nil
@@ -76,7 +74,6 @@ class FoodRecognitionService: ObservableObject {
         }
     }
     
-    // MARK: - Mock API (Replace with real API)
     private func mockFoodProductAPI(barcode: String) async -> FoodProduct {
         // Simulate network delay
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
@@ -359,14 +356,14 @@ class FoodRecognitionService: ObservableObject {
         }
     }
     
-    // MARK: - Clear Data
+    // Clear Data
     func clearData() {
         nutritionInfo = nil
         foodProduct = nil
         errorMessage = nil
     }
     
-    // MARK: - Parse Nutrition Text
+    // Parse Nutrition Text
     func parseNutritionText(_ text: String) async -> NutritionInfo? {
         // Use MLKitManager to extract nutrition info from text
         let textArray = text.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }
@@ -374,7 +371,7 @@ class FoodRecognitionService: ObservableObject {
     }
 }
 
-// MARK: - Food Product Model
+// Food Product Model
 struct FoodProduct: Identifiable, Codable, Equatable {
     let id: String
     let name: String
@@ -457,7 +454,7 @@ enum FoodCategory: String, CaseIterable, Codable {
     }
 }
 
-// MARK: - Extensions
+//  Extensions
 extension NutritionInfo {
     var isEmpty: Bool {
         return calories == 0 && protein == 0 && carbs == 0 && 

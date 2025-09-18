@@ -2,7 +2,8 @@
 //  LuxuryLoginView.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Luxury Login Screen with premium design
+//
 
 import SwiftUI
 
@@ -18,6 +19,7 @@ struct LuxuryLoginView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                // Luxury Background
                 LuxuryTheme.Gradients.primaryBackground
                     .ignoresSafeArea()
                 
@@ -70,7 +72,7 @@ struct LuxuryLoginView: View {
         .environmentObject(authManager)
     }
     
-    // Header Section
+    // MARK: - Header Section
     private var luxuryHeaderSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.large) {
             // App Logo/Icon
@@ -99,7 +101,7 @@ struct LuxuryLoginView: View {
         }
     }
     
-    // Login Form
+    // MARK: - Login Form
     private var luxuryLoginForm: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             // Email Field
@@ -165,7 +167,7 @@ struct LuxuryLoginView: View {
         }
     }
     
-    // Biometric Section
+    // MARK: - Biometric Section
     private var luxuryBiometricSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             // Divider
@@ -208,7 +210,7 @@ struct LuxuryLoginView: View {
         }
     }
     
-    // Register Section
+    // MARK: - Register Section
     private var luxuryRegisterSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             Text("Don't have an account?")
@@ -230,7 +232,7 @@ struct LuxuryLoginView: View {
         }
     }
     
-    // Helper Functions
+    // MARK: - Helper Functions
     private func startAnimations() {
         withAnimation(.spring(response: 0.8, dampingFraction: 0.8)) {
             animateElements = true
@@ -268,7 +270,7 @@ struct LuxuryLoginView: View {
     }
 }
 
-// Luxury Text Field Components
+// MARK: - Luxury Text Field Components
 
 struct LuxuryTextField: View {
     let title: String

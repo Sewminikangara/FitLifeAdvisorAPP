@@ -2,7 +2,7 @@
 //  SmartCameraView.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Created by AI Assistant on 2025-09-09.
 //
 
 import SwiftUI
@@ -455,14 +455,7 @@ struct MealCameraView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Constants.Spacing.medium) {
                     ForEach(mealAnalysisManager.getMealsForToday().prefix(5)) { meal in
-                        RecentMealCard(
-                            mealImage: meal.recognizedFoods.first?.name.firstEmoji ?? "🍽️",
-                            mealName: meal.recognizedFoods.first?.name ?? "Meal",
-                            calories: Int(meal.nutritionalSummary.totalCalories),
-                            healthScore: meal.nutritionalSummary.healthScore,
-                            aiInsight: meal.nutritionalSummary.recommendations.first ?? "Nutritious choice!",
-                            timeAgo: DateFormatter.timeAgo.string(from: meal.timestamp)
-                        )
+                        RecentMealCard(meal: meal)
                     }
                 }
                 .padding(.horizontal, 1)
@@ -519,7 +512,54 @@ struct NutritionSummaryItem: View {
     }
 }
 
-
+struct RecentMealCard: View {
+    let meal: SavedMeal
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: Constants.Spacing.small) {
+            // Meal image or placeholder
+            if let imageData = meal.image, let image = UIImage(data: imageData) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 80, height: 60)
+                    .cornerRadius(8)
+                    .clipped()
+            } else {
+                Rectangle()
+                    .fill(meal.mealType.color.opacity(0.2))
+                    .frame(width: 80, height: 60)
+                    .cornerRadius(8)
+                    .overlay(
+                        Image(systemName: meal.mealType.icon)
+                            .foregroundColor(meal.mealType.color)
+                            .font(.title3)
+                    )
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(meal.name)
+                    .font(Constants.Typography.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(Constants.Colors.textDark)
+                    .lineLimit(1)
+                
+                Text("\(Int(meal.totalNutrition.calories)) cal")
+                    .font(Constants.Typography.small)
+                    .foregroundColor(Constants.Colors.textLight)
+                
+                Text(meal.mealType.rawValue)
+                    .font(Constants.Typography.small)
+                    .foregroundColor(meal.mealType.color)
+            }
+        }
+        .frame(width: 80)
+        .padding(Constants.Spacing.small)
+        .background(Constants.Colors.cardBackground)
+        .cornerRadius(Constants.cornerRadius)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
 
 // MARK: - Enhanced Image Picker for Photo Library
 

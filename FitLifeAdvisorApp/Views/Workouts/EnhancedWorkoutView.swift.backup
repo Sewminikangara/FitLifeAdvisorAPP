@@ -1,0 +1,503 @@
+//
+//  EnhancedWorkoutView.swift
+//  FitLifeAdvisorApp
+//
+//  Redesigned Workout Tab with HealthKit Integration & Meal-Workout Synergy
+
+
+import SwiftUI
+import HealthKit
+
+struct EnhancedWorkoutView: View {
+    @StateObject private var healthKitManager = HealthKitManager.shared
+    @StateObject private var workoutTracker = WorkoutTrackingManager()
+    @StateObject private var mealWorkoutSynergy = MealWorkoutSynergyManager()
+    
+    @State private var selectedTab: WorkoutTab = .overview
+    @State private var showingWorkoutDetail = false
+    @State private var selectedWorkout: EnhancedWorkoutPlan?
+    @State private var showingActiveWorkout = false
+    @State private var showingHealthKitPermissions = false
+    @State private var animateElements = false
+    
+    enum WorkoutTab: String, CaseIterable {
+        case overview = "Overview"
+        case track = "Track"
+        case insights = "Insights"
+        case programs = "Programs"
+        
+        var icon: String {
+            switch self {
+            case .overview: return "house.fill"
+            case .track: return "play.circle.fill"
+            case .insights: return "chart.line.uptrend.xyaxis"
+            case .programs: return "list.bullet.clipboard.fill"
+            }
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                // Luxury Background
+                LuxuryTheme.Gradients.primaryBackground
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    // Custom Tab Selector
+                    customTabSelector
+                
+                // Main Content
+                ScrollView {
+                    LazyVStack(spacing: LuxuryTheme.Spacing.large) {
+                        switch selectedTab {
+                        case .overview:
+                            overviewContent
+                        case .track:
+                            trackingContent
+                        case .insights:
+                            insightsContent
+                        case .programs:
+                            programsContent
+                        }
+                    }
+                    .padding(.bottom, 100)
+                }
+                .refreshable {
+                    await healthKitManager.loadAllHealthData()
+                    await mealWorkoutSynergy.updateRecommendations()
+                }
+            }
+            .background(Constants.Colors.backgroundGray)
+            .navigationTitle("Fitness Hub")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showingActiveWorkout = true }) {
+                        Image(systemName: "play.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Constants.Colors.primaryBlue)
+                    }
+                }
+            }
+        }
+        .onAppear {
+            setupInitialData()
+            withAnimation(.easeInOut(duration: 0.8).delay(0.3)) {
+                animateElements = true
+            }
+        }
+        .sheet(isPresented: $showingHealthKitPermissions) {
+            HealthKitPermissionView()
+        }
+        .sheet(isPresented: $showingActiveWorkout) {
+            ActiveWorkoutTrackingView()
+                .environmentObject(workoutTracker)
+                .environmentObject(healthKitManager)
+        }
+        .sheet(isPresented: $showingWorkoutDetail) {
+            if let workout = selectedWorkout {
+                EnhancedWorkoutDetailView(workout: workout)
+                    .environmentObject(mealWorkoutSynergy)
+            }
+        }
+    }
+    
+    // MARK: - Custom Tab Selector
+    private var customTabSelector: some View {
+        HStack(spacing: 0) {
+            ForEach(WorkoutTab.allCases, id: \.self) { tab in
+                Button(action: {
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                        selectedTab = tab
+                    }
+                }) {
+                    VStack(spacing: 6) {
+                        Image(systemName: tab.icon)
+                            .font(.system(size: 16, weight: .medium))
+                        
+                        Text(tab.rawValue)
+                            .font(.system(size: 12, weight: .semibold))
+                    }
+                    .foregroundColor(selectedTab == tab ? LuxuryTheme.Colors.goldPrimary : LuxuryTheme.Colors.tertiaryText)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(
+                        selectedTab == tab ?
+                        LuxuryTheme.Colors.goldPrimary.opacity(0.1) :
+                        Color.clear
+                    )
+                    .cornerRadius(12)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+        }
+        .padding(.horizontal, LuxuryTheme.Spacing.medium)
+        .padding(.vertical, LuxuryTheme.Spacing.small)
+        .background(LuxuryTheme.Colors.surfaceBackground)
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
+        .padding(.horizontal, Constants.Spacing.large)
+        .padding(.top, Constants.Spacing.medium)
+    }
+    
+    // MARK: - Overview Content
+    private var overviewContent: some View {
+        VStack(spacing: Constants.Spacing.large) {
+            // HealthKit Status & Quick Stats
+            healthKitStatusSection
+            
+            // Meal-Workout Synergy Card
+            mealWorkoutSynergyCard
+            
+            // Today's Activity Summary
+            todaysActivitySummary
+            
+            // Quick Action Buttons
+            quickActionButtons
+            
+            // Recent Workouts from HealthKit
+            recentHealthKitWorkouts
+            
+            // Recommended Workouts
+            recommendedWorkouts
+        }
+        .padding(.top, Constants.Spacing.medium)
+    }
+    
+    // MARK: - HealthKit Status Section
+    private var healthKitStatusSection: some View {
+        VStack(spacing: Constants.Spacing.medium) {
+            if !healthKitManager.isAuthorized {
+                HealthKitAuthorizationCard {
+                    showingHealthKitPermissions = true
+                }
+                .scaleEffect(animateElements ? 1.0 : 0.95)
+                .opacity(animateElements ? 1.0 : 0.0)
+                .animation(.easeInOut(duration: 0.8).delay(0.1), value: animateElements)
+            } else {
+                // Live HealthKit Stats
+                LiveHealthStatsCard(metrics: healthKitManager.todaysMetrics)
+                    .scaleEffect(animateElements ? 1.0 : 0.95)
+                    .opacity(animateElements ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateElements)
+            }
+        }
+        .padding(.horizontal, Constants.Spacing.large)
+    }
+    
+    // MARK: - Meal-Workout Synergy Card
+    private var mealWorkoutSynergyCard: some View {
+        MealWorkoutSynergyCard(
+            recommendations: mealWorkoutSynergy.currentRecommendations,
+            energyBalance: mealWorkoutSynergy.energyBalance,
+            nextMealTiming: mealWorkoutSynergy.nextOptimalMealTime
+        )
+        .padding(.horizontal, Constants.Spacing.large)
+        .scaleEffect(animateElements ? 1.0 : 0.95)
+        .opacity(animateElements ? 1.0 : 0.0)
+        .animation(.easeInOut(duration: 0.8).delay(0.3), value: animateElements)
+    }
+    
+    // MARK: - Today's Activity Summary
+    private var todaysActivitySummary: some View {
+        VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
+            HStack {
+                Text("Today's Activity")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundColor(Constants.Colors.textDark)
+                
+                Spacer()
+                
+                if healthKitManager.isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                }
+            }
+            .padding(.horizontal, Constants.Spacing.large)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Constants.Spacing.medium) {
+                    ActivityRingCard(
+                        title: "Steps",
+                        value: Int(healthKitManager.todaysMetrics.steps),
+                        goal: 10000,
+                        unit: "steps",
+                        color: .green,
+                        icon: "figure.walk"
+                    )
+                    
+                    ActivityRingCard(
+                        title: "Calories",
+                        value: Int(healthKitManager.todaysMetrics.calories),
+                        goal: 600,
+                        unit: "kcal",
+                        color: .red,
+                        icon: "flame.fill"
+                    )
+                    
+                    ActivityRingCard(
+                        title: "Distance",
+                        value: Int(healthKitManager.todaysMetrics.distance / 1000),
+                        goal: 5,
+                        unit: "km",
+                        color: .blue,
+                        icon: "location.fill"
+                    )
+                    
+                    HeartRateCard(
+                        currentHR: Int(healthKitManager.todaysMetrics.heartRate),
+                        restingHR: Int(healthKitManager.todaysMetrics.restingHeartRate)
+                    )
+                }
+                .padding(.horizontal, Constants.Spacing.large)
+            }
+        }
+    }
+    
+    // MARK: - Quick Action Buttons
+    private var quickActionButtons: some View {
+        VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
+            Text("Quick Actions")
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundColor(Constants.Colors.textDark)
+                .padding(.horizontal, Constants.Spacing.large)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: Constants.Spacing.medium) {
+                WorkoutQuickActionCard(
+                    title: "Start Workout",
+                    subtitle: "Begin tracking",
+                    icon: "play.fill",
+                    color: .green
+                ) {
+                    showingActiveWorkout = true
+                }
+                
+                WorkoutQuickActionCard(
+                    title: "Log Manual Workout",
+                    subtitle: "Add past activity",
+                    icon: "plus.circle.fill",
+                    color: .blue
+                ) {
+                    // Show manual workout entry
+                }
+                
+                WorkoutQuickActionCard(
+                    title: "Sync HealthKit",
+                    subtitle: "Update data",
+                    icon: "arrow.clockwise",
+                    color: .orange
+                ) {
+                    Task {
+                        await healthKitManager.loadAllHealthData()
+                    }
+                }
+                
+                WorkoutQuickActionCard(
+                    title: "View Programs",
+                    subtitle: "Structured plans",
+                    icon: "list.bullet.clipboard",
+                    color: .purple
+                ) {
+                    selectedTab = .programs
+                }
+            }
+            .padding(.horizontal, Constants.Spacing.large)
+        }
+    }
+    
+    // MARK: - Recent HealthKit Workouts
+    private var recentHealthKitWorkouts: some View {
+        VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
+            HStack {
+                Text("Recent Activities")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundColor(Constants.Colors.textDark)
+                
+                Spacer()
+                
+                Button("View All") {
+                    selectedTab = .insights
+                }
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(Constants.Colors.primaryBlue)
+            }
+            .padding(.horizontal, Constants.Spacing.large)
+            
+            if healthKitManager.recentWorkouts.isEmpty {
+                EmptyWorkoutCard()
+                    .padding(.horizontal, Constants.Spacing.large)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: Constants.Spacing.medium) {
+                        ForEach(Array(healthKitManager.recentWorkouts.prefix(5)), id: \.id) { workout in
+                            HealthKitWorkoutCard(workout: workout)
+                        }
+                    }
+                    .padding(.horizontal, Constants.Spacing.large)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Recommended Workouts
+    private var recommendedWorkouts: some View {
+        VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Recommended for You")
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundColor(Constants.Colors.textDark)
+                    
+                    Text("Based on your activity and meal patterns")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(Constants.Colors.textLight)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "brain.head.profile")
+                    .font(.title2)
+                    .foregroundColor(Constants.Colors.primaryBlue)
+            }
+            .padding(.horizontal, Constants.Spacing.large)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: Constants.Spacing.medium) {
+                ForEach(generateRecommendedWorkouts(), id: \.id) { workout in
+                    RecommendedWorkoutCard(workout: workout) {
+                        selectedWorkout = workout
+                        showingWorkoutDetail = true
+                    }
+                }
+            }
+            .padding(.horizontal, Constants.Spacing.large)
+        }
+    }
+    
+    // MARK: - Tracking Content
+    private var trackingContent: some View {
+        VStack(spacing: Constants.Spacing.large) {
+            // Active Workout Status
+            if workoutTracker.isWorkoutActive {
+                WorkoutTrackingStatusCard()
+                    .environmentObject(workoutTracker)
+                    .padding(.horizontal, Constants.Spacing.large)
+            }
+            
+            // Workout Categories for Quick Start
+            WorkoutCategoriesGrid { workoutType in
+                workoutTracker.startWorkout(type: workoutType)
+                showingActiveWorkout = true
+            }
+            .padding(.horizontal, Constants.Spacing.large)
+            
+            // Pre-built Workout Templates
+            WorkoutTemplatesSection { template in
+                workoutTracker.startTemplateWorkout(template)
+                showingActiveWorkout = true
+            }
+        }
+        .padding(.top, Constants.Spacing.medium)
+    }
+    
+    // MARK: - Insights Content
+    private var insightsContent: some View {
+        VStack(spacing: Constants.Spacing.large) {
+            // Weekly Progress Chart
+            WorkoutInsightsChart(data: healthKitManager.weeklyTrends)
+                .padding(.horizontal, Constants.Spacing.large)
+            
+            // Meal-Workout Correlation Insights
+            MealWorkoutCorrelationCard(insights: mealWorkoutSynergy.insights)
+                .padding(.horizontal, Constants.Spacing.large)
+            
+            // Performance Trends
+            PerformanceTrendsSection(workouts: healthKitManager.recentWorkouts)
+                .padding(.horizontal, Constants.Spacing.large)
+            
+            // Achievement Badges
+            AchievementBadgesSection()
+                .padding(.horizontal, Constants.Spacing.large)
+        }
+        .padding(.top, Constants.Spacing.medium)
+    }
+    
+    // MARK: - Programs Content
+    private var programsContent: some View {
+        VStack(spacing: Constants.Spacing.large) {
+            // Featured Programs
+            FeaturedProgramsSection()
+                .padding(.horizontal, Constants.Spacing.large)
+            
+            // Custom Program Builder
+            CustomProgramBuilderCard()
+                .padding(.horizontal, Constants.Spacing.large)
+            
+            // Your Programs
+            YourProgramsSection()
+                .padding(.horizontal, Constants.Spacing.large)
+        }
+        .padding(.top, Constants.Spacing.medium)
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func setupInitialData() {
+        Task {
+            if !healthKitManager.isAuthorized {
+                try? await healthKitManager.requestAuthorization()
+            }
+            await healthKitManager.loadAllHealthData()
+            await mealWorkoutSynergy.updateRecommendations()
+        }
+    }
+    
+    private func generateRecommendedWorkouts() -> [EnhancedWorkoutPlan] {
+        return [
+            EnhancedWorkoutPlan(
+                title: "Post-Meal Cardio",
+                description: "Light cardio after your last meal",
+                type: .running,
+                duration: 20,
+                intensity: .moderate,
+                caloriesBurn: 150,
+                tags: ["Post-Meal", "Cardio"],
+                isRecommended: true
+            ),
+            EnhancedWorkoutPlan(
+                title: "Pre-Breakfast HIIT",
+                description: "High intensity to kickstart metabolism",
+                type: .other,
+                duration: 15,
+                intensity: .high,
+                caloriesBurn: 200,
+                tags: ["Pre-Meal", "HIIT"],
+                isRecommended: true
+            ),
+            EnhancedWorkoutPlan(
+                title: "Evening Yoga",
+                description: "Gentle flow for recovery",
+                type: .yoga,
+                duration: 30,
+                intensity: .low,
+                caloriesBurn: 100,
+                tags: ["Evening", "Recovery"],
+                isRecommended: true
+            ),
+            EnhancedWorkoutPlan(
+                title: "Strength Building",
+                description: "Build muscle with proper nutrition timing",
+                type: .functionalStrengthTraining,
+                duration: 45,
+                intensity: .moderate,
+                caloriesBurn: 300,
+                tags: ["Strength", "Muscle Building"],
+                isRecommended: true
+            )
+        ]
+    }
+}
+
+#Preview {
+    EnhancedWorkoutView()
+}

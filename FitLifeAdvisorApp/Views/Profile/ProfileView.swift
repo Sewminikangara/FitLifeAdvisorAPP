@@ -2,7 +2,7 @@
 //  ProfileView.swift
 //  FitLifeAdvisorApp
 //
-//  Enhanced Modern Profile View
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import SwiftUI
@@ -20,16 +20,12 @@ struct ProfileView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 0) {
-                    // Modern Profile Header with Gradient Background
                     profileHeaderView
                     
-                    // Quick Stats Section
                     quickStatsView
                     
-                    // Menu Sections
                     menuSectionsView
                     
-                    // Sign Out Section
                     signOutSectionView
                 }
             }
@@ -63,8 +59,7 @@ struct ProfileView: View {
     }
     
     private var profileHeaderView: some View {
-        VStack(spacing: Constants.Spacing.medium) {
-            // Gradient Background
+        VStack(spacing: 0) {
             LinearGradient(
                 gradient: Gradient(colors: [
                     Constants.Colors.primaryBlue,
@@ -73,21 +68,20 @@ struct ProfileView: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .frame(height: 200)
+            .frame(height: 180) 
             .overlay(
-                VStack(spacing: Constants.Spacing.medium) {
-                    // Profile Avatar with Premium Design
+                VStack(spacing: 12) { 
                     Button(action: {
                         showingPersonalInfo = true
                     }) {
                         ZStack {
                             Circle()
                                 .fill(.white.opacity(0.3))
-                                .frame(width: 110, height: 110)
+                                .frame(width: 90, height: 90) 
                             
                             Circle()
                                 .fill(.white)
-                                .frame(width: 100, height: 100)
+                                .frame(width: 80, height: 80) 
                                 .overlay(
                                     Group {
                                         if let profileImageURL = authManager.currentUser?.profileImageURL {
@@ -98,53 +92,58 @@ struct ProfileView: View {
                                                     .clipShape(Circle())
                                             } placeholder: {
                                                 Text(String(authManager.currentUser?.name.prefix(1) ?? "U"))
-                                                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                                                    .font(.system(size: 28, weight: .bold, design: .rounded)) // Smaller font
                                                     .foregroundColor(Constants.Colors.primaryBlue)
                                             }
                                         } else {
                                             Text(String(authManager.currentUser?.name.prefix(1) ?? "U"))
-                                                .font(.system(size: 36, weight: .bold, design: .rounded))
+                                                .font(.system(size: 28, weight: .bold, design: .rounded)) // Smaller font
                                                 .foregroundColor(Constants.Colors.primaryBlue)
                                         }
                                     }
                                 )
                             
-                            // Edit Indicator
                             Circle()
                                 .fill(Constants.Colors.primaryBlue)
-                                .frame(width: 32, height: 32)
+                                .frame(width: 26, height: 26) 
                                 .overlay(
                                     Image(systemName: "camera.fill")
-                                        .font(.system(size: 14, weight: .medium))
+                                        .font(.system(size: 12, weight: .medium)) 
                                         .foregroundColor(.white)
                                 )
-                                .offset(x: 35, y: 35)
+                                .offset(x: 28, y: 28) 
                         }
                     }
                     .buttonStyle(ScaleButtonStyle())
                     
-                    // User Info
-                    VStack(spacing: 4) {
+                    // User Info - Compact for phone
+                    VStack(spacing: 2) {
                         Text(authManager.currentUser?.name ?? "Welcome Back!")
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .font(.system(size: 20, weight: .bold, design: .rounded)) // Smaller title
                             .foregroundColor(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8) // Auto-scale if text is too long
                         
                         Text(authManager.currentUser?.email ?? "")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 14, weight: .medium)) // Smaller subtitle
                             .foregroundColor(.white.opacity(0.8))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
+                    .padding(.horizontal, 16) // Add horizontal padding
                 }
-                .padding(.top, Constants.Spacing.large)
+                .padding(.top, 20) // Reduced top padding
             )
-            .cornerRadius(24)
+            .cornerRadius(20) // Slightly smaller corner radius
+            .padding(.horizontal, 16) // Add margins for phone
         }
     }
     
     private var quickStatsView: some View {
-        VStack(spacing: Constants.Spacing.medium) {
+        VStack(spacing: 12) { // Reduced spacing for phone
             HStack {
                 Text("Your Progress")
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .font(.system(size: 18, weight: .bold, design: .rounded)) // Smaller title
                     .foregroundColor(Constants.Colors.textDark)
                 
                 Spacer()
@@ -152,14 +151,14 @@ struct ProfileView: View {
                 Button("View Details") {
                     // TODO: Navigate to detailed progress
                 }
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 13, weight: .medium)) // Smaller button text
                 .foregroundColor(Constants.Colors.primaryBlue)
             }
-            .padding(.horizontal, Constants.Spacing.large)
-            .padding(.top, Constants.Spacing.large)
+            .padding(.horizontal, 16) // Consistent phone padding
+            .padding(.top, 16)
             
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Constants.Spacing.medium) {
+                HStack(spacing: 12) { // Reduced spacing between cards
                     ModernStatCard(
                         title: "Streak",
                         value: "12",
@@ -196,38 +195,31 @@ struct ProfileView: View {
                         trend: "-0.5kg"
                     )
                 }
-                .padding(.horizontal, Constants.Spacing.large)
+                .padding(.horizontal, 16) // Phone-optimized padding
             }
         }
     }
     
     private var menuSectionsView: some View {
         VStack(spacing: Constants.Spacing.large) {
-            // Health & Fitness Section
+            // Account & Settings Section
             menuSection(
-                title: "Health & Fitness",
+                title: "Account & Settings",
                 items: [
                     MenuItemData(icon: "person.circle.fill", title: "Personal Information", subtitle: "Update your profile details", action: { showingPersonalInfo = true }),
                     MenuItemData(icon: "target", title: "Goals & Preferences", subtitle: "Set your fitness targets", action: { showingGoals = true }),
-                    MenuItemData(icon: "chart.line.uptrend.xyaxis", title: "Progress Analytics", subtitle: "View detailed insights", action: { /* TODO */ })
-                ]
-            )
-            
-            // App Settings Section
-            menuSection(
-                title: "App Settings",
-                items: [
                     MenuItemData(icon: "bell.fill", title: "Notifications", subtitle: "Manage your alerts", action: { showingNotifications = true }),
                     MenuItemData(icon: "lock.shield.fill", title: "Privacy & Security", subtitle: "Manage your data privacy", action: { showingPrivacy = true }),
-                    MenuItemData(icon: "gear", title: "App Settings", subtitle: "Customize your experience", action: { showingSettings = true })
+                    MenuItemData(icon: "questionmark.circle.fill", title: "Help & Support", subtitle: "Get help and contact us", action: { showingHelp = true })
                 ]
             )
             
-            // Support Section
+            // App Features Section
             menuSection(
-                title: "Support",
+                title: "App Features",
                 items: [
-                    MenuItemData(icon: "questionmark.circle.fill", title: "Help & Support", subtitle: "Get help and contact us", action: { showingHelp = true }),
+                    MenuItemData(icon: "chart.line.uptrend.xyaxis", title: "Progress Analytics", subtitle: "View detailed insights", action: { /* TODO */ }),
+                    MenuItemData(icon: "gear", title: "App Settings", subtitle: "Customize your experience", action: { showingSettings = true }),
                     MenuItemData(icon: "star.fill", title: "Rate FitLife", subtitle: "Share your feedback", action: { /* TODO: Open App Store */ }),
                     MenuItemData(icon: "square.and.arrow.up", title: "Share App", subtitle: "Invite friends to FitLife", action: { /* TODO: Share sheet */ })
                 ]
@@ -297,46 +289,51 @@ struct ModernStatCard: View {
     let trend: String
     
     var body: some View {
-        VStack(spacing: Constants.Spacing.small) {
+        VStack(spacing: 8) { // Reduced spacing for phone
             HStack {
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(.title3) // Smaller icon for phone
                     .foregroundColor(color)
                 
                 Spacer()
                 
                 Text(trend)
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.system(size: 10, weight: .medium)) // Smaller trend text
                     .foregroundColor(color)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
                     .background(color.opacity(0.1))
-                    .cornerRadius(8)
+                    .cornerRadius(6)
             }
             
             Spacer()
             
-            VStack(spacing: 2) {
+            VStack(spacing: 1) {
                 Text(value)
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .font(.system(size: 24, weight: .bold, design: .rounded)) // Smaller value for phone
                     .foregroundColor(Constants.Colors.textDark)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                 
                 Text(unit)
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 11, weight: .medium)) // Smaller unit text
                     .foregroundColor(Constants.Colors.textLight)
+                    .lineLimit(1)
             }
             
             Spacer()
             
             Text(title)
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 12, weight: .medium)) // Smaller title
                 .foregroundColor(Constants.Colors.textDark)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
-        .frame(width: 140, height: 120)
-        .padding(Constants.Spacing.medium)
+        .frame(width: 120, height: 100) // Smaller card size for phone
+        .padding(12) // Reduced padding
         .background(.white)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+        .cornerRadius(12) // Smaller corner radius
+        .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2) // Lighter shadow
     }
 }
 
@@ -389,14 +386,25 @@ struct ModernPersonalInfoView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authManager: AuthenticationManager
     @State private var name: String = ""
+    @State private var phoneNumber: String = ""
     @State private var age: String = ""
     @State private var height: String = ""
     @State private var weight: String = ""
+    @State private var targetWeight: String = ""
     @State private var gender: String = "Not specified"
     @State private var activityLevel: String = "Moderate"
+    @State private var fitnessGoal: String = "Maintain weight"
+    @State private var dietType: String = "Regular"
+    @State private var preferredUnits: String = "Metric"
+    @State private var workoutDays: String = "3-4 days"
+    @State private var aboutMe: String = ""
     
     let genderOptions = ["Male", "Female", "Other", "Not specified"]
     let activityLevels = ["Sedentary", "Light", "Moderate", "Active", "Very Active"]
+    let fitnessGoals = ["Lose weight", "Maintain weight", "Gain weight", "Build muscle", "Improve fitness"]
+    let dietTypes = ["Regular", "Vegetarian", "Vegan", "Keto", "Paleo", "Mediterranean", "Other"]
+    let unitOptions = ["Metric (kg, cm)", "Imperial (lb, ft)"]
+    let workoutDayOptions = ["1-2 days", "3-4 days", "5-6 days", "Daily"]
     
     var body: some View {
         NavigationView {
@@ -428,7 +436,6 @@ struct ModernPersonalInfoView: View {
     private var profileImageSection: some View {
         VStack(spacing: Constants.Spacing.medium) {
             Button(action: {
-                // TODO: Image picker
             }) {
                 ZStack {
                     Circle()
@@ -486,39 +493,85 @@ struct ModernPersonalInfoView: View {
     }
     
     private var personalInfoForm: some View {
-        VStack(spacing: Constants.Spacing.large) {
-            VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
+        VStack(spacing: 20) { 
+            
+            VStack(alignment: .leading, spacing: 16) {
                 Text("Basic Information")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(Constants.Colors.textDark)
-                    .padding(.horizontal, Constants.Spacing.large)
+                    .padding(.horizontal, 16)
                 
-                VStack(spacing: Constants.Spacing.medium) {
+                VStack(spacing: 16) {
                     ModernTextField(title: "Full Name", text: $name, placeholder: "Enter your full name", icon: "person.fill")
                     
-                    HStack(spacing: Constants.Spacing.medium) {
+                    ModernTextField(title: "Phone Number", text: $phoneNumber, placeholder: "+1 (555) 123-4567", icon: "phone.fill", keyboardType: .phonePad)
+                    
+                    HStack(spacing: 12) {
                         ModernTextField(title: "Age", text: $age, placeholder: "25", icon: "calendar", keyboardType: .numberPad)
                         
                         ModernPickerField(title: "Gender", selection: $gender, options: genderOptions, icon: "person.2.fill")
                     }
                     
-                    HStack(spacing: Constants.Spacing.medium) {
+                    HStack(spacing: 12) {
                         ModernTextField(title: "Height", text: $height, placeholder: "170 cm", icon: "ruler", keyboardType: .numberPad)
                         
                         ModernTextField(title: "Weight", text: $weight, placeholder: "70 kg", icon: "scalemass", keyboardType: .decimalPad)
                     }
                 }
-                .padding(.horizontal, Constants.Spacing.large)
+                .padding(.horizontal, 16)
             }
             
-            VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
-                Text("Fitness Information")
+            // Health Information Section
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Health Information")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(Constants.Colors.textDark)
-                    .padding(.horizontal, Constants.Spacing.large)
+                    .padding(.horizontal, 16)
                 
-                ModernPickerField(title: "Activity Level", selection: $activityLevel, options: activityLevels, icon: "figure.run")
-                    .padding(.horizontal, Constants.Spacing.large)
+                VStack(spacing: 16) {
+                    ModernPickerField(title: "Activity Level", selection: $activityLevel, options: activityLevels, icon: "figure.run")
+                    
+                    ModernPickerField(title: "Fitness Goal", selection: $fitnessGoal, options: fitnessGoals, icon: "target")
+                    
+                    HStack(spacing: 12) {
+                        ModernTextField(title: "Target Weight", text: $targetWeight, placeholder: "65 kg", icon: "arrow.down.to.line", keyboardType: .decimalPad)
+                        
+                        ModernPickerField(title: "Diet Type", selection: $dietType, options: dietTypes, icon: "leaf.fill")
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+            
+            // Preferences Section  
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Preferences")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(Constants.Colors.textDark)
+                    .padding(.horizontal, 16)
+                
+                VStack(spacing: 16) {
+                    ModernPickerField(title: "Units", selection: $preferredUnits, options: unitOptions, icon: "ruler")
+                    
+                    ModernPickerField(title: "Workout Days", selection: $workoutDays, options: workoutDayOptions, icon: "calendar.badge.plus")
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("About Me")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(Constants.Colors.textDark)
+                        
+                        TextEditor(text: $aboutMe)
+                            .frame(height: 80)
+                            .padding(12)
+                            .background(.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                            )
+                    }
+                }
+                .padding(.horizontal, 16)
             }
         }
     }
@@ -567,12 +620,10 @@ struct ModernPersonalInfoView: View {
     }
     
     private func saveUserInfo() {
-        // TODO: Save user information
         dismiss()
     }
 }
 
-// MARK: - Supporting Views
 struct ModernTextField: View {
     let title: String
     @Binding var text: String

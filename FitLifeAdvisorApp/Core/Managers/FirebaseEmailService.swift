@@ -2,12 +2,10 @@
 //  FirebaseEmailService.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
 //
 
 import Foundation
 
-// Conditional Firebase imports - only if Firebase SDK is available
 #if canImport(Firebase)
 import Firebase
 #endif
@@ -28,26 +26,24 @@ class FirebaseEmailService: NSObject, ObservableObject {
     
     private func checkFirebaseConfiguration() {
         #if canImport(Firebase)
-        // Check if Firebase is configured
         if FirebaseApp.app() != nil {
             isConfigured = true
-            print("✅ Firebase is configured and ready for real emails")
+            print("Firebase is configured and ready for real emails")
         } else {
             isConfigured = false
-            print("⚠️ Firebase not configured - using simulation mode")
+            print("Firebase not configured - using simulation mode")
         }
         #else
         isConfigured = false
-        print("📦 Firebase SDK not installed - using simulation mode")
-        print("💡 To enable real emails: Add Firebase SDK via Swift Package Manager")
+        print(" Firebase SDK not installed - using simulation mode")
+        print("To enable real emails: Add Firebase SDK via Swift Package Manager")
         #endif
     }
     
-    // MARK: - Real Firebase Password Reset
     
     func sendRealPasswordResetEmail(to email: String, completion: @escaping (Result<Void, EmailError>) -> Void) {
         guard isConfigured else {
-            print("⚠️ Firebase not configured, falling back to simulation")
+            print(" Firebase not configured, falling back to simulation")
             // Fall back to simulation
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 completion(.failure(.firebaseError("Firebase SDK not installed. Add Firebase SDK to enable real emails.")))

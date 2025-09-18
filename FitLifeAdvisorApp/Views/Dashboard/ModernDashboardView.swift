@@ -11,17 +11,14 @@ struct ModernDashboardView: View {
     @EnvironmentObject var authManager: AuthenticationManager
     @StateObject private var mlKitManager = MLKitManager()
     @StateObject private var foodRecognitionService = FoodRecognitionService()
-    @StateObject private var aiMealService = AIFoodRecognitionService()
     @State private var selectedTimeframe: TimeFrame = .today
     @State private var showingMealAnalysis = false
-    @State private var showingSnapMealCamera = false
     @State private var showingWorkoutLog = false
     @State private var showingHealthyPlaces = false
     @State private var showingQuickFoodScanner = false
     @State private var showingFoodResult = false
     @State private var scannedFoodProduct: FoodProduct?
     @State private var animateStats = false
-    @State private var showingMealHistory = false
     
     enum TimeFrame: String, CaseIterable {
         case today = "Today"
@@ -36,20 +33,14 @@ struct ModernDashboardView: View {
                     // Modern Header with Greeting
                     modernHeader
                     
-                    // Featured AI Snap Meal (Hero Section)
-                    featuredSnapMealSection
-                    
                     // Time Frame Selector
                     timeFrameSelector
                     
                     // Quick Stats Overview
                     quickStatsSection
                     
-                    // Enhanced Quick Actions
-                    enhancedQuickActionsSection
-                    
-                    // Recent Meals AI Insights
-                    recentMealsSection
+                    // Quick Actions
+                    quickActionsSection
                     
                     // Find Healthy Places
                     findHealthyPlacesSection
@@ -62,6 +53,9 @@ struct ModernDashboardView: View {
                     
                     // Smart Insights
                     smartInsightsSection
+                    
+                    // Quick Meal Analysis
+                    quickMealSection
                 }
                 .padding(.horizontal, Constants.Spacing.large)
                 .padding(.bottom, 100) // Tab bar spacing
@@ -71,12 +65,6 @@ struct ModernDashboardView: View {
         }
         .sheet(isPresented: $showingMealAnalysis) {
             MealPhotoAnalysisView()
-        }
-        .sheet(isPresented: $showingSnapMealCamera) {
-            SnapMealCameraView()
-        }
-        .sheet(isPresented: $showingMealHistory) {
-            MealHistoryView()
         }
         .sheet(isPresented: $showingQuickFoodScanner) {
             FoodScannerView()
@@ -259,76 +247,8 @@ struct ModernDashboardView: View {
         }
     }
     
-    // MARK: - Featured Snap Meal Section
-    private var featuredSnapMealSection: some View {
-        VStack(spacing: 0) {
-            // Hero Card
-            Button(action: { showingSnapMealCamera = true }) {
-                VStack(spacing: 20) {
-                    // AI Icon with Animation
-                    ZStack {
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    colors: [.white.opacity(0.3), .clear],
-                                    center: .center,
-                                    startRadius: 5,
-                                    endRadius: 40
-                                )
-                            )
-                            .frame(width: 80, height: 80)
-                            .scaleEffect(animateStats ? 1.2 : 1.0)
-                            .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: animateStats)
-                        
-                        Image(systemName: "brain")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(.white)
-                            .shadow(color: .black.opacity(0.3), radius: 10)
-                    }
-                    
-                    VStack(spacing: 12) {
-                        Text("🍽️ Snap Meal - AI Powered")
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                        
-                        Text("Take a photo of your meal and get instant AI-powered nutritional analysis, calorie counting, and personalized health insights")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.white.opacity(0.9))
-                            .multilineTextAlignment(.center)
-                            .lineLimit(3)
-                        
-                        // Features Row
-                        HStack(spacing: 24) {
-                            FeatureBadge(icon: "camera.viewfinder", text: "Smart Recognition")
-                            FeatureBadge(icon: "chart.bar.fill", text: "Instant Analysis")
-                            FeatureBadge(icon: "lightbulb.fill", text: "AI Insights")
-                        }
-                        .padding(.top, 8)
-                    }
-                }
-                .padding(24)
-                .frame(maxWidth: .infinity)
-                .background(
-                    LinearGradient(
-                        colors: [
-                            Color.purple,
-                            Color.blue,
-                            Color.cyan
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .cornerRadius(24)
-                .shadow(color: .purple.opacity(0.4), radius: 20, x: 0, y: 10)
-            }
-            .buttonStyle(SnapMealButtonStyle())
-        }
-    }
-    
-    // MARK: - Enhanced Quick Actions Section
-    private var enhancedQuickActionsSection: some View {
+    // MARK: - Quick Actions Section
+    private var quickActionsSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             Text("Quick Actions")
                 .font(.system(size: 22, weight: .bold, design: .rounded))
@@ -336,12 +256,12 @@ struct ModernDashboardView: View {
             
             HStack(spacing: Constants.Spacing.medium) {
                 ModernQuickActionButton(
-                    icon: "sparkles",
-                    title: "AI Snap Meal",
-                    subtitle: "Smart Recognition",
-                    colors: [.purple, .blue]
+                    icon: "camera.fill",
+                    title: "Snap Meal",
+                    subtitle: "AI Analysis",
+                    colors: [.blue, .blue.opacity(0.7)]
                 ) {
-                    showingSnapMealCamera = true
+                    showingMealAnalysis = true
                 }
                 
                 ModernQuickActionButton(
@@ -536,94 +456,53 @@ struct ModernDashboardView: View {
         }
     }
     
-    // MARK: - Recent Meals Section
-    private var recentMealsSection: some View {
+    // MARK: - Quick Meal Section
+    private var quickMealSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
-            HStack {
-                Text("Recent AI Meal Analysis")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundColor(Constants.Colors.textDark)
-                
-                Spacer()
-                
-                Button("View All") {
-                    showingMealHistory = true
-                }
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(Constants.Colors.primaryBlue)
-            }
+            Text("Quick Meal Log")
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundColor(Constants.Colors.textDark)
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Constants.Spacing.medium) {
-                    RecentMealCard(
-                        mealImage: "🍳",
-                        mealName: "Breakfast Bowl",
-                        calories: 420,
-                        healthScore: 8.5,
-                        aiInsight: "Great protein balance!",
-                        timeAgo: "2h ago"
-                    )
-                    
-                    RecentMealCard(
-                        mealImage: "🥗",
-                        mealName: "Garden Salad",
-                        calories: 280,
-                        healthScore: 9.2,
-                        aiInsight: "Perfect nutrient density",
-                        timeAgo: "5h ago"
-                    )
-                    
-                    RecentMealCard(
-                        mealImage: "🍜",
-                        mealName: "Ramen Bowl",
-                        calories: 650,
-                        healthScore: 6.8,
-                        aiInsight: "High sodium - balance with water",
-                        timeAgo: "1d ago"
-                    )
-                    
-                    // Add New Meal Card
-                    Button(action: { showingSnapMealCamera = true }) {
-                        VStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .stroke(
-                                        LinearGradient(
-                                            colors: [.purple, .blue],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        style: StrokeStyle(lineWidth: 2, dash: [8, 4])
-                                    )
-                                    .frame(width: 60, height: 60)
-                                
-                                Image(systemName: "plus")
-                                    .font(.system(size: 24, weight: .semibold))
-                                    .foregroundColor(.purple)
-                            }
-                            
-                            Text("Add Meal")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.purple)
-                        }
-                        .frame(width: 120, height: 140)
-                        .background(.white)
-                        .cornerRadius(16)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(
-                                    LinearGradient(
-                                        colors: [.purple.opacity(0.3), .blue.opacity(0.3)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    style: StrokeStyle(lineWidth: 1, dash: [6, 3])
+            Button(action: { showingMealAnalysis = true }) {
+                VStack(spacing: Constants.Spacing.large) {
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [Constants.Colors.primaryBlue.opacity(0.2), Constants.Colors.primaryBlue.opacity(0.1)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
                                 )
-                        )
+                            )
+                            .frame(width: 100, height: 100)
+                        
+                        VStack(spacing: 8) {
+                            Image(systemName: "camera.fill")
+                                .font(.system(size: 28, weight: .semibold))
+                                .foregroundColor(Constants.Colors.primaryBlue)
+                            
+                            Text("Snap & Analyze")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(Constants.Colors.primaryBlue)
+                        }
+                    }
+                    
+                    VStack(spacing: 4) {
+                        Text("AI-Powered Meal Analysis")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(Constants.Colors.textDark)
+                        
+                        Text("Take a photo of your meal and get instant nutritional insights")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(Constants.Colors.textLight)
+                            .multilineTextAlignment(.center)
                     }
                 }
-                .padding(.horizontal, Constants.Spacing.small)
+                .padding(Constants.Spacing.extraLarge)
             }
+            .background(.white)
+            .cornerRadius(20)
+            .shadow(color: .black.opacity(0.1), radius: 16, x: 0, y: 8)
         }
     }
     
@@ -866,130 +745,6 @@ struct WorkoutLogView: View {
                 Spacer()
             }
             .navigationTitle("Log Workout")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}
-
-// MARK: - Feature Badge Component
-struct FeatureBadge: View {
-    let icon: String
-    let text: String
-    
-    var body: some View {
-        VStack(spacing: 6) {
-            Image(systemName: icon)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.white)
-            
-            Text(text)
-                .font(.system(size: 11, weight: .medium))
-                .foregroundColor(.white.opacity(0.9))
-                .multilineTextAlignment(.center)
-        }
-        .frame(width: 80)
-    }
-}
-
-// MARK: - Snap Meal Button Style
-struct SnapMealButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .opacity(configuration.isPressed ? 0.9 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
-    }
-}
-
-// MARK: - Recent Meal Card Component
-struct RecentMealCard: View {
-    let mealImage: String
-    let mealName: String
-    let calories: Int
-    let healthScore: Double
-    let aiInsight: String
-    let timeAgo: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Meal Image
-            Text(mealImage)
-                .font(.system(size: 40))
-                .frame(width: 60, height: 60)
-                .background(
-                    Circle()
-                        .fill(Color.gray.opacity(0.1))
-                )
-            
-            VStack(alignment: .leading, spacing: 6) {
-                // Meal Name
-                Text(mealName)
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(Constants.Colors.textDark)
-                    .lineLimit(1)
-                
-                // Calories
-                Text("\(calories) cal")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.orange)
-                
-                // Health Score
-                HStack(spacing: 4) {
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 12))
-                        .foregroundColor(.yellow)
-                    
-                    Text("\(String(format: "%.1f", healthScore))/10")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Constants.Colors.textDark)
-                }
-                
-                // AI Insight
-                Text(aiInsight)
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(.purple)
-                    .lineLimit(2)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.purple.opacity(0.1))
-                    .cornerRadius(6)
-                
-                // Time
-                Text(timeAgo)
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(Constants.Colors.textLight)
-            }
-        }
-        .frame(width: 120, height: 180)
-        .padding(12)
-        .background(.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
-    }
-}
-
-// MARK: - Meal History View (Placeholder)
-struct MealHistoryView: View {
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("🍽️")
-                        .font(.system(size: 60))
-                    
-                    Text("Meal History")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Text("Your AI-analyzed meals and nutritional insights will appear here")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .padding()
-            }
-            .navigationTitle("Meal History")
             .navigationBarTitleDisplayMode(.inline)
         }
     }

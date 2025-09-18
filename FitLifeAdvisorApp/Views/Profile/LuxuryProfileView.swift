@@ -22,48 +22,39 @@ struct LuxuryProfileView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // Luxury Background
                 LuxuryTheme.Gradients.primaryBackground
                     .ignoresSafeArea()
                 
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        // Luxury Profile Header
                         luxuryProfileHeader
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.medium)
                         
-                        // Premium Health Score
                         premiumHealthScoreSection
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.xLarge)
                         
-                        // Achievement Showcase
                         achievementShowcaseSection
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.xLarge)
                         
-                        // Premium Stats Overview
                         premiumStatsSection
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.xLarge)
                         
-                        // Luxury Menu Sections
                         luxuryMenuSections
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.xLarge)
                         
-                        // Premium Settings
                         premiumSettingsSection
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.xLarge)
                         
-                        // Luxury Sign Out
                         luxurySignOutSection
                             .padding(.horizontal, LuxuryTheme.Spacing.medium)
                             .padding(.top, LuxuryTheme.Spacing.xLarge)
                         
-                        // Bottom spacing
                         Color.clear.frame(height: 120)
                     }
                 }
@@ -99,7 +90,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Luxury Profile Header
     private var luxuryProfileHeader: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -115,7 +105,6 @@ struct LuxuryProfileView: View {
                 
                 Spacer()
                 
-                // Settings Button
                 Button(action: { showingSettings = true }) {
                     ZStack {
                         Circle()
@@ -135,9 +124,7 @@ struct LuxuryProfileView: View {
                 }
             }
             
-            // Premium Profile Card
             VStack(spacing: LuxuryTheme.Spacing.medium) {
-                // Profile Avatar and Info
                 HStack(spacing: LuxuryTheme.Spacing.medium) {
                     ZStack {
                         Circle()
@@ -162,7 +149,6 @@ struct LuxuryProfileView: View {
                             .font(LuxuryTheme.Typography.body)
                             .foregroundColor(LuxuryTheme.Colors.secondaryText)
                         
-                        // Premium Badge
                         HStack(spacing: 6) {
                             Image(systemName: "crown.fill")
                                 .font(.system(size: 12, weight: .bold))
@@ -192,7 +178,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Premium Health Score
     private var premiumHealthScoreSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -229,7 +214,6 @@ struct LuxuryProfileView: View {
                     
                     Spacer()
                     
-                    // AI Score Ring
                     ZStack {
                         Circle()
                             .stroke(LuxuryTheme.Colors.cardBorder, lineWidth: 8)
@@ -265,7 +249,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Achievement Showcase
     private var achievementShowcaseSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -321,7 +304,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Premium Stats
     private var premiumStatsSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -368,7 +350,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Luxury Menu Sections
     private var luxuryMenuSections: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -418,7 +399,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Premium Settings
     private var premiumSettingsSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -461,7 +441,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Luxury Sign Out
     private var luxurySignOutSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             Button(action: {
@@ -498,7 +477,6 @@ struct LuxuryProfileView: View {
         }
     }
     
-    // MARK: - Helper Functions
     private func startAnimations() {
         withAnimation(.spring(response: 0.8, dampingFraction: 0.8).delay(0.1)) {
             animateProfile = true
@@ -510,7 +488,6 @@ struct LuxuryProfileView: View {
     }
 }
 
-// MARK: - Supporting Luxury Components
 
 struct LuxuryAchievementBadge: View {
     let title: String
@@ -681,7 +658,6 @@ struct LuxuryPremiumFeatureRow: View {
     }
 }
 
-// MARK: - Placeholder Views
 
 struct LuxurySettingsView: View {
     @Environment(\.dismiss) var dismiss

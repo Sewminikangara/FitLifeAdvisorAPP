@@ -2,7 +2,8 @@
 //  MealAnalysisView.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Modern AI-powered meal analysis with beautiful UI and ML Kit integration
+//
 
 import SwiftUI
 

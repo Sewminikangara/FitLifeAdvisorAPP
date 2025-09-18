@@ -11,7 +11,7 @@ import Vision
 import CoreML
 import SwiftUI
 
-// MARK: - Data Models
+// data models
 struct FoodItem: Identifiable, Codable, Equatable {
     let id = UUID()
     let name: String
@@ -26,13 +26,29 @@ struct FoodItem: Identifiable, Codable, Equatable {
     }
 }
 
+struct NutritionInfo: Codable, Equatable {
+    let calories: Double
+    let protein: Double // grams
+    let carbs: Double   // grams
+    let fat: Double     // grams
+    let fiber: Double   // grams
+    let sugar: Double   // grams
+    let sodium: Double  // mg
+    let cholesterol: Double // mg
+    
+    // Computed properties for display
+    var caloriesFromProtein: Double { protein * 4 }
+    var caloriesFromCarbs: Double { carbs * 4 }
+    var caloriesFromFat: Double { fat * 9 }
+}
+
 struct PortionInfo: Codable, Equatable {
     let servingSize: String
     let weight: Double // grams
     let unit: String
 }
 
-// MARK: - Image Analysis Support
+//  Image Analysis Support
 
 struct ImageAnalysis {
     let brightness: Double
@@ -69,7 +85,47 @@ struct MealAnalysisResult {
     let analysisTime: Date
 }
 
-// MARK: - Analysis Error Types
+struct SavedMeal: Identifiable, Codable, Equatable {
+    let id = UUID()
+    let name: String
+    let image: Data? // Stored as Data for Core Data compatibility
+    let foodItems: [FoodItem]
+    let totalNutrition: NutritionInfo
+    let timestamp: Date
+    let mealType: MealType
+    
+    // Equatable conformance
+    static func == (lhs: SavedMeal, rhs: SavedMeal) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+enum MealType: String, CaseIterable, Codable {
+    case breakfast = "Breakfast"
+    case lunch = "Lunch"
+    case dinner = "Dinner"
+    case snack = "Snack"
+    
+    var icon: String {
+        switch self {
+        case .breakfast: return "sun.rise.fill"
+        case .lunch: return "sun.max.fill"
+        case .dinner: return "moon.fill"
+        case .snack: return "heart.fill"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .breakfast: return .orange
+        case .lunch: return .yellow
+        case .dinner: return .purple
+        case .snack: return .pink
+        }
+    }
+}
+
+// Analysis Error Types
 enum MealAnalysisError: LocalizedError {
     case noFoodDetected
     case lowConfidence
@@ -93,7 +149,7 @@ enum MealAnalysisError: LocalizedError {
     }
 }
 
-// MARK: - Main Manager Class
+//  Main Manager Class
 @MainActor
 class MealAnalysisManager: ObservableObject {
     static let shared = MealAnalysisManager()
@@ -111,7 +167,7 @@ class MealAnalysisManager: ObservableObject {
         loadSavedMeals()
     }
     
-    // MARK: - Image Analysis Methods
+    // Image Analysis Methods
     
     func analyzeFood(from image: UIImage) async -> Result<MealAnalysisResult, MealAnalysisError> {
         isAnalyzing = true
@@ -153,7 +209,6 @@ class MealAnalysisManager: ObservableObject {
     }
     
     private func detectFoodItems(in image: UIImage) async throws -> [String] {
-        // Enhanced food detection using image analysis
         // This analyzes the actual image properties to make better food predictions
         
         return try await withCheckedThrowingContinuation { continuation in

@@ -2,7 +2,7 @@
 //  ProfileSettingsView.swift
 //  FitLifeAdvisorApp
 //
-//  Created by AI Assistant on 2025-09-09.
+//  created by Sewmini 010 on 2025-08-28.
 //
 
 import SwiftUI
@@ -111,7 +111,6 @@ struct ProfileSettingsView: View {
                     }
                 }
                 
-                // Account Section
                 Section("Account") {
                     Button(action: {
                         showingLogoutAlert = true

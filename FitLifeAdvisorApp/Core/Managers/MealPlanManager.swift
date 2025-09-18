@@ -2,7 +2,7 @@
 //  MealPlanManager.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Minimal generator for a weekly meal plan and shopping list aggregation.
 //
 
 import Foundation

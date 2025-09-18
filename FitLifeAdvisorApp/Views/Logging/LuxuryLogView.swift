@@ -2,7 +2,7 @@
 //  LuxuryLogView.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Luxury Logging View with premium design
 //
 
 import SwiftUI

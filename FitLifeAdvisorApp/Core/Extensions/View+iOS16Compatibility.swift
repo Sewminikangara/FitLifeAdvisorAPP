@@ -2,6 +2,7 @@
 //  View+iOS16Compatibility.swift
 //  FitLifeAdvisorApp
 //
+//  iOS version compatibility helpers
 //
 
 import SwiftUI

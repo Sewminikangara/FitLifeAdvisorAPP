@@ -127,22 +127,22 @@ struct LogView: View {
                     
                     // AI Features showcase
                     HStack(spacing: Constants.Spacing.medium) {
-                        LogFeatureBadge(
-                            icon: "brain",
-                            text: "AI Analysis",
-                            color: .purple
+                        FeatureBadge(
+                            icon: "brain.head.profile",
+                            text: "AI Recognition",
+                            color: Constants.Colors.primaryBlue
                         )
                         
-                        LogFeatureBadge(
-                            icon: "timer",
-                            text: "Quick Log",
-                            color: .blue
-                        )
-                        
-                        LogFeatureBadge(
+                        FeatureBadge(
                             icon: "chart.bar.fill",
-                            text: "Analytics",
-                            color: .green
+                            text: "Nutrition Facts",
+                            color: Constants.Colors.successGreen
+                        )
+                        
+                        FeatureBadge(
+                            icon: "stopwatch.fill",
+                            text: "Instant Results",
+                            color: Constants.Colors.warningOrange
                         )
                         
                         Spacer()
@@ -279,7 +279,7 @@ struct LogView: View {
 
 // MARK: - Supporting Components
 
-struct LogFeatureBadge: View {
+struct FeatureBadge: View {
     let icon: String
     let text: String
     let color: Color

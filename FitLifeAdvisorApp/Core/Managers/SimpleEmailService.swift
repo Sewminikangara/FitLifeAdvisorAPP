@@ -2,7 +2,7 @@
 //  SimpleEmailService.swift
 //  FitLifeAdvisorApp
 //
-//  created by Sewmini 010 on 2025-08-28.
+//  Simple email service using native iOS Mail functionality (for demonstration)
 //
 
 import Foundation
