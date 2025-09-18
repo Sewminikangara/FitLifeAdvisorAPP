@@ -13,11 +13,11 @@ import Combine
 @MainActor
 final class HealthKitManagerComprehensiveTests: XCTestCase {
     
-    // MARK: - Test Properties
+    // Test Properties
     var healthKitManager: HealthKitManager!
     var cancellables: Set<AnyCancellable>!
     
-    // MARK: - Setup & Teardown
+    // Setup & Teardown
     
     override func setUpWithError() throws {
         super.setUp()
@@ -32,7 +32,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         super.tearDown()
     }
     
-    // MARK: - Initialization Tests
+    // Initialization Tests
     
     func testHealthKitManagerSingleton() {
         // Given & When
@@ -56,7 +56,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         XCTAssertNil(healthKitManager.errorMessage, "Error message should be nil initially")
     }
     
-    // MARK: - Authorization Tests
+    // Authorization Tests
     
     func testHealthKitAvailabilityCheck() {
         // Given & When - HealthKit availability is device-dependent
@@ -93,7 +93,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: 10.0)
     }
     
-    // MARK: - Data Model Tests
+    // Data Model Tests
     
     func testHealthMetricsCreation() {
         // Given
@@ -187,7 +187,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         XCTAssertEqual(nutritionData.timestamp, timestamp)
     }
     
-    // MARK: - Error Handling Tests
+    // Error Handling Tests
     
     func testHealthKitError() {
         // Given & When
@@ -205,7 +205,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         XCTAssertEqual(readFailedError.errorDescription, "Failed to read data from HealthKit")
     }
     
-    // MARK: - Workout Activity Type Extension Tests
+    //Workout Activity Type Extension Tests
     
     func testWorkoutActivityTypeDisplayNames() {
         // Given & When & Then
@@ -237,7 +237,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         XCTAssertEqual(HKWorkoutActivityType.other.icon, "heart.fill")
     }
     
-    // MARK: - Data Saving Tests
+    // Data Saving Tests
     
     func testSaveWorkout() async throws {
         // Given
@@ -307,7 +307,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         }
     }
     
-    // MARK: - Published Properties Tests
+    //  Published Properties Tests
     
     func testPublishedPropertiesUpdateCorrectly() {
         // Given
@@ -339,7 +339,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
     
-    // MARK: - Performance Tests
+    //  Performance Tests
     
     func testLoadAllHealthDataPerformance() {
         // Given
@@ -351,7 +351,7 @@ final class HealthKitManagerComprehensiveTests: XCTestCase {
         }
     }
     
-    // MARK: - Memory Management Tests
+    // Memory Management Tests
     
     func testMemoryManagement() {
         // Given

@@ -12,11 +12,11 @@ import UIKit
 @MainActor
 final class MealAnalysisManagerTests: XCTestCase {
     
-    // MARK: - Test Properties
+    //  Test Properties
     var mealAnalysisManager: MealAnalysisManager!
     var testImage: UIImage!
     
-    // MARK: - Setup & Teardown
+    // Setup & Teardown
     
     override func setUpWithError() throws {
         super.setUp()
@@ -35,7 +35,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         super.tearDown()
     }
     
-    // MARK: - Helper Methods
+    //  Helper Methods
     
     private func createTestImage() -> UIImage {
         let size = CGSize(width: 100, height: 100)
@@ -85,7 +85,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         )
     }
     
-    // MARK: - Initialization Tests
+    // Initialization Tests
     
     func testMealAnalysisManagerInitialization() {
         // Given & When - MealAnalysisManager is initialized in setup
@@ -106,7 +106,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertTrue(instance1 === instance2, "Should return the same singleton instance")
     }
     
-    // MARK: - Data Model Tests
+    // Data Model Tests
     
     func testNutritionInfoInitialization() {
         // Given & When
@@ -196,7 +196,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertEqual(portion.unit, "grams")
     }
     
-    // MARK: - Image Analysis Tests
+    //  Image Analysis Tests
     
     func testImageAnalysisProperties() {
         // Given & When
@@ -265,7 +265,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertFalse(darkAnalysis.hasSignificantWhite(), "Should not detect white in dark images")
     }
     
-    // MARK: - Meal Analysis Result Tests
+    // Meal Analysis Result Tests
     
     func testMealAnalysisResultInitialization() {
         // Given
@@ -343,7 +343,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertEqual(savedMeal1, savedMeal1, "Same saved meal should be equal to itself")
     }
     
-    // MARK: - Meal Type Tests
+    //  Meal Type Tests
     
     func testMealTypeEnum() {
         // Given & When & Then
@@ -375,7 +375,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertTrue(allCases.contains(.snack))
     }
     
-    // MARK: - Error Handling Tests
+    // Error Handling Tests
     
     func testMealAnalysisErrorDescriptions() {
         // Given & When & Then
@@ -391,7 +391,7 @@ final class MealAnalysisManagerTests: XCTestCase {
                       "Nutrition data is currently unavailable. Please try again later.")
     }
     
-    // MARK: - Meal Management Tests
+    //  Meal Management Tests
     
     func testSaveMeal() {
         // Given
@@ -458,7 +458,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertEqual(totalNutrition.fat, 20.0, "Should sum fat from both meals")
     }
     
-    // MARK: - NutritionInfo Extension Tests
+    // NutritionInfo Extension Tests
     
     func testNutritionInfoMacroBreakdown() {
         // Given
@@ -501,7 +501,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertEqual(nutrition.formatted(nutrition.carbs, decimals: 0), "31")
     }
     
-    // MARK: - State Management Tests
+    //  State Management Tests
     
     func testAnalyzingState() {
         // Given
@@ -537,7 +537,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertNil(mealAnalysisManager.errorMessage, "Should clear error message")
     }
     
-    // MARK: - Performance Tests
+    // Performance Tests
     
     func testMealSavingPerformance() {
         let result = createMockMealAnalysisResult()
@@ -563,7 +563,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         }
     }
     
-    // MARK: - Compatibility Tests
+    // Compatibility Tests
     
     func testNutritionInfoCodable() throws {
         // Given
@@ -623,7 +623,6 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertEqual(savedMeal.foodItems.count, decodedSavedMeal.foodItems.count)
     }
     
-    // MARK: - Legacy Compatibility Tests
     
     func testParseNutritionFromLabelText() {
         // Given
