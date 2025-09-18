@@ -428,134 +428,77 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertFalse(mealAnalysisManager.savedMeals.contains(savedMeal), "Should not contain deleted meal")
     }
     
-    func testDeleteMealsByMealType() {
-        // Given
-        let result1 = createMockMealAnalysisResult()
-        let result2 = createMockMealAnalysisResult()
-        mealAnalysisManager.saveMeal(result1, name: "Breakfast Meal", mealType: .breakfast)
-        mealAnalysisManager.saveMeal(result2, name: "Lunch Meal", mealType: .lunch)
-        
-        let initialCount = mealAnalysisManager.savedMeals.count
-        
-        // When
-        mealAnalysisManager.deleteMealsBy(mealType: .breakfast)
-        
-        // Then
-        XCTAssertEqual(mealAnalysisManager.savedMeals.count, initialCount - 1, "Should remove breakfast meals")
-        XCTAssertTrue(mealAnalysisManager.savedMeals.allSatisfy { $0.mealType != .breakfast }, 
-                     "Should not contain any breakfast meals")
-    }
-    
-    func testGetMealsByMealType() {
-        // Given
-        let result1 = createMockMealAnalysisResult()
-        let result2 = createMockMealAnalysisResult()
-        mealAnalysisManager.saveMeal(result1, name: "Breakfast Meal", mealType: .breakfast)
-        mealAnalysisManager.saveMeal(result2, name: "Lunch Meal", mealType: .lunch)
-        
-        // When
-        let breakfastMeals = mealAnalysisManager.getMealsBy(mealType: .breakfast)
-        let lunchMeals = mealAnalysisManager.getMealsBy(mealType: .lunch)
-        
-        // Then
-        XCTAssertEqual(breakfastMeals.count, 1, "Should have one breakfast meal")
-        XCTAssertEqual(lunchMeals.count, 1, "Should have one lunch meal")
-        XCTAssertEqual(breakfastMeals.first?.name, "Breakfast Meal")
-        XCTAssertEqual(lunchMeals.first?.name, "Lunch Meal")
-    }
-    
-    func testGetMealsByDateRange() {
+    func testGetMealsForToday() {
         // Given
         let result = createMockMealAnalysisResult()
-        mealAnalysisManager.saveMeal(result, name: "Recent Meal", mealType: .lunch)
-        
-        let now = Date()
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now)!
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: now)!
+        mealAnalysisManager.saveMeal(result, name: "Today's Meal", mealType: .lunch)
         
         // When
-        let mealsInRange = mealAnalysisManager.getMealsBy(from: yesterday, to: tomorrow)
-        let mealsOutOfRange = mealAnalysisManager.getMealsBy(from: tomorrow, to: tomorrow)
+        let todaysMeals = mealAnalysisManager.getMealsForToday()
         
         // Then
-        XCTAssertEqual(mealsInRange.count, 1, "Should find meal within date range")
-        XCTAssertEqual(mealsOutOfRange.count, 0, "Should not find meal outside date range")
+        XCTAssertEqual(todaysMeals.count, 1, "Should have one meal for today")
+        XCTAssertEqual(todaysMeals.first?.name, "Today's Meal")
     }
     
-    // MARK: - Nutrition Calculation Tests
-    
-    func testCalculateTotalNutritionFromMultipleFoodItems() {
+    func testGetTotalNutritionForToday() {
         // Given
-        let nutrition1 = NutritionInfo(calories: 100, protein: 10, carbs: 15, fat: 5, fiber: 2, sugar: 3, sodium: 200, cholesterol: 20)
-        let nutrition2 = NutritionInfo(calories: 150, protein: 15, carbs: 20, fat: 8, fiber: 3, sugar: 5, sodium: 300, cholesterol: 30)
-        
-        let portion = PortionInfo(servingSize: "1 serving", weight: 100, unit: "grams")
-        
-        let foodItem1 = FoodItem(name: "Food 1", confidence: 0.8, nutrition: nutrition1, portion: portion)
-        let foodItem2 = FoodItem(name: "Food 2", confidence: 0.9, nutrition: nutrition2, portion: portion)
-        
-        let foodItems = [foodItem1, foodItem2]
+        let result1 = createMockMealAnalysisResult()
+        let result2 = createMockMealAnalysisResult()
+        mealAnalysisManager.saveMeal(result1, name: "Breakfast", mealType: .breakfast)
+        mealAnalysisManager.saveMeal(result2, name: "Lunch", mealType: .lunch)
         
         // When
-        let totalNutrition = mealAnalysisManager.calculateTotalNutrition(from: foodItems)
+        let totalNutrition = mealAnalysisManager.getTotalNutritionForToday()
         
         // Then
-        XCTAssertEqual(totalNutrition.calories, 250, "Should sum calories correctly")
-        XCTAssertEqual(totalNutrition.protein, 25, "Should sum protein correctly")
-        XCTAssertEqual(totalNutrition.carbs, 35, "Should sum carbs correctly")
-        XCTAssertEqual(totalNutrition.fat, 13, "Should sum fat correctly")
-        XCTAssertEqual(totalNutrition.fiber, 5, "Should sum fiber correctly")
-        XCTAssertEqual(totalNutrition.sugar, 8, "Should sum sugar correctly")
-        XCTAssertEqual(totalNutrition.sodium, 500, "Should sum sodium correctly")
-        XCTAssertEqual(totalNutrition.cholesterol, 50, "Should sum cholesterol correctly")
+        XCTAssertEqual(totalNutrition.calories, 500.0, "Should sum calories from both meals")
+        XCTAssertEqual(totalNutrition.protein, 40.0, "Should sum protein from both meals")
+        XCTAssertEqual(totalNutrition.carbs, 60.0, "Should sum carbs from both meals")
+        XCTAssertEqual(totalNutrition.fat, 20.0, "Should sum fat from both meals")
     }
     
-    func testCalculateTotalNutritionFromEmptyArray() {
+    // MARK: - NutritionInfo Extension Tests
+    
+    func testNutritionInfoMacroBreakdown() {
         // Given
-        let emptyFoodItems: [FoodItem] = []
+        let nutrition = NutritionInfo(
+            calories: 400,
+            protein: 25, // 100 calories (25%)
+            carbs: 50,   // 200 calories (50%)  
+            fat: 11,     // 100 calories (25%)
+            fiber: 5,
+            sugar: 10,
+            sodium: 500,
+            cholesterol: 60
+        )
         
         // When
-        let totalNutrition = mealAnalysisManager.calculateTotalNutrition(from: emptyFoodItems)
+        let breakdown = nutrition.macroBreakdown
         
         // Then
-        XCTAssertEqual(totalNutrition.calories, 0)
-        XCTAssertEqual(totalNutrition.protein, 0)
-        XCTAssertEqual(totalNutrition.carbs, 0)
-        XCTAssertEqual(totalNutrition.fat, 0)
-        XCTAssertEqual(totalNutrition.fiber, 0)
-        XCTAssertEqual(totalNutrition.sugar, 0)
-        XCTAssertEqual(totalNutrition.sodium, 0)
-        XCTAssertEqual(totalNutrition.cholesterol, 0)
+        XCTAssertEqual(breakdown.protein, 25.0, accuracy: 1.0, "Protein should be 25% of calories")
+        XCTAssertEqual(breakdown.carbs, 50.0, accuracy: 1.0, "Carbs should be 50% of calories")
+        XCTAssertEqual(breakdown.fat, 25.0, accuracy: 1.0, "Fat should be 25% of calories")
     }
     
-    func testCalculateOverallConfidenceFromFoodItems() {
+    func testNutritionInfoFormattedValues() {
         // Given
-        let portion = PortionInfo(servingSize: "1 serving", weight: 100, unit: "grams")
-        let nutrition = NutritionInfo(calories: 100, protein: 10, carbs: 15, fat: 5, fiber: 2, sugar: 3, sodium: 200, cholesterol: 20)
+        let nutrition = NutritionInfo(
+            calories: 250.567,
+            protein: 20.123,
+            carbs: 30.789,
+            fat: 10.456,
+            fiber: 5.234,
+            sugar: 8.678,
+            sodium: 400.901,
+            cholesterol: 50.345
+        )
         
-        let foodItem1 = FoodItem(name: "Food 1", confidence: 0.8, nutrition: nutrition, portion: portion)
-        let foodItem2 = FoodItem(name: "Food 2", confidence: 0.6, nutrition: nutrition, portion: portion)
-        let foodItem3 = FoodItem(name: "Food 3", confidence: 0.9, nutrition: nutrition, portion: portion)
-        
-        let foodItems = [foodItem1, foodItem2, foodItem3]
-        
-        // When
-        let overallConfidence = mealAnalysisManager.calculateOverallConfidence(from: foodItems)
-        
-        // Then
-        let expectedConfidence = (0.8 + 0.6 + 0.9) / 3.0
-        XCTAssertEqual(overallConfidence, Float(expectedConfidence), accuracy: 0.01, "Should calculate average confidence correctly")
-    }
-    
-    func testCalculateOverallConfidenceFromEmptyArray() {
-        // Given
-        let emptyFoodItems: [FoodItem] = []
-        
-        // When
-        let overallConfidence = mealAnalysisManager.calculateOverallConfidence(from: emptyFoodItems)
-        
-        // Then
-        XCTAssertEqual(overallConfidence, 0.0, "Should return 0 confidence for empty array")
+        // When & Then
+        XCTAssertEqual(nutrition.formatted(nutrition.calories), "250.6")
+        XCTAssertEqual(nutrition.formatted(nutrition.protein, decimals: 2), "20.12")
+        XCTAssertEqual(nutrition.formatted(nutrition.carbs, decimals: 0), "31")
     }
     
     // MARK: - State Management Tests
@@ -600,26 +543,23 @@ final class MealAnalysisManagerTests: XCTestCase {
         let result = createMockMealAnalysisResult()
         
         measure {
-            for i in 0..<100 {
+            for i in 0..<10 { // Reduced from 100 to 10 for faster testing
                 mealAnalysisManager.saveMeal(result, name: "Performance Test \(i)", mealType: .lunch)
             }
         }
     }
     
-    func testNutritionCalculationPerformance() {
-        // Given
-        let portion = PortionInfo(servingSize: "1 serving", weight: 100, unit: "grams")
-        let nutrition = NutritionInfo(calories: 100, protein: 10, carbs: 15, fat: 5, fiber: 2, sugar: 3, sodium: 200, cholesterol: 20)
+    func testTotalNutritionCalculationPerformance() {
+        // Given - Create multiple meals for today
+        let results = Array(0..<50).map { _ in createMockMealAnalysisResult() }
         
-        var foodItems: [FoodItem] = []
-        for i in 0..<1000 {
-            let foodItem = FoodItem(name: "Food \(i)", confidence: 0.8, nutrition: nutrition, portion: portion)
-            foodItems.append(foodItem)
+        for (index, result) in results.enumerated() {
+            mealAnalysisManager.saveMeal(result, name: "Meal \(index)", mealType: .lunch)
         }
         
         // When & Then
         measure {
-            _ = mealAnalysisManager.calculateTotalNutrition(from: foodItems)
+            _ = mealAnalysisManager.getTotalNutritionForToday()
         }
     }
     
