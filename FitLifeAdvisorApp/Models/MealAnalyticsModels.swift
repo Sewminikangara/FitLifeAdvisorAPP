@@ -2,7 +2,7 @@ import Foundation
 
 struct MealAnalytics: Identifiable {
     let id = UUID()
-    let mealType: MealType
+    let mealType: AnalyticsMealType
     let calories: Double
     let protein: Double
     let carbs: Double
@@ -18,6 +18,6 @@ struct MealStat {
     let totalFat: Double
 }
 
-enum MealType: String, CaseIterable {
+enum AnalyticsMealType: String, CaseIterable {
     case breakfast, lunch, dinner, snack
 }
