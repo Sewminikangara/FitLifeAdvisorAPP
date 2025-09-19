@@ -2,8 +2,8 @@
 //  HealthKitManagerComprehensiveTests.swift
 //  FitLifeAdvisorAppTests
 //
-//  Comprehensive unit tests for HealthKitManager
-//
+//  unit tests for HealthKitManager
+
 
 import XCTest
 import HealthKit

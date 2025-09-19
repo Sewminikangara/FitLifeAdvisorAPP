@@ -2,7 +2,6 @@
 //  NutritionEstimator.swift
 //  FitLifeAdvisorApp
 //
-//  Provides a simple, deterministic nutrition estimate used by tests
 //
 
 import Foundation

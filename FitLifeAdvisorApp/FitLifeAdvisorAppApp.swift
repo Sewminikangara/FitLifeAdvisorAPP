@@ -3,14 +3,13 @@
 //  FitLifeAdvisorApp
 //
 //  Created by Sewmini 010 on 2025-08-28.
-//
+
 
 import SwiftUI
 import Firebase
 
 @main
 struct FitLifeAdvisorAppApp: App {
-    
     
     init() {
         FirebaseApp.configure()
@@ -61,7 +60,8 @@ struct FitLifeAdvisorAppApp: App {
                         authManager.authenticateWithBiometrics()
                     }
                 }
-                
+                // Manually enable biometrics on app launch
+                UserDefaults.standard.set(true, forKey: "biometricEnabled")
                 // Setup notifications when app launches
                 setupNotifications()
             }

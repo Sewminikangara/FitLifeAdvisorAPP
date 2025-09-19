@@ -2,7 +2,7 @@
 //  LuxuryRegisterView.swift
 //  FitLifeAdvisorApp
 //
-//  Luxury Registration Screen with premium design
+//   Registration Screen with premium design
 //
 
 import SwiftUI
@@ -70,7 +70,7 @@ struct LuxuryRegisterView: View {
         .environmentObject(authManager)
     }
     
-    // MARK: - Header Section
+    // Header Section
     private var luxuryHeaderSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.large) {
             // App Logo/Icon
@@ -99,7 +99,7 @@ struct LuxuryRegisterView: View {
         }
     }
     
-    // MARK: - Registration Form
+    // Registration Form
     private var luxuryRegistrationForm: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             // Full Name Field
@@ -229,7 +229,7 @@ struct LuxuryRegisterView: View {
         }
     }
     
-    // MARK: - Login Section
+    // Login Section
     private var luxuryLoginSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             Text("Already have an account?")
@@ -251,7 +251,7 @@ struct LuxuryRegisterView: View {
         }
     }
     
-    // MARK: - Computed Properties
+    // Computed Properties
     private var isFormValid: Bool {
         return !fullName.isEmpty &&
                email.contains("@") &&
@@ -260,7 +260,7 @@ struct LuxuryRegisterView: View {
                agreeToTerms
     }
     
-    // MARK: - Helper Functions
+    // Helper Functions
     private func startAnimations() {
         withAnimation(.spring(response: 0.8, dampingFraction: 0.8)) {
             animateElements = true

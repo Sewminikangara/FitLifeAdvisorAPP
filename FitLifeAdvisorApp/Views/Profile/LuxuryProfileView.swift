@@ -2,8 +2,8 @@
 //  LuxuryProfileView.swift
 //  FitLifeAdvisorApp
 //
-//  Luxury Profile View with premium design
-//
+// Profile View with premium design
+
 
 import SwiftUI
 

@@ -2,7 +2,7 @@
 //  AuthenticationManagerTests.swift
 //  FitLifeAdvisorAppTests
 //
-//. unit tests for authentication 
+//  Unit tests for authentication
 //
 
 import XCTest
@@ -11,22 +11,19 @@ import LocalAuthentication
 
 @MainActor
 final class AuthenticationManagerTests: XCTestCase {
-    
     // Test Properties
     var authManager: AuthenticationManager!
     
     //Setup & Teardown
-    
     override func setUpWithError() throws {
         super.setUp()
         authManager = AuthenticationManager()
-        // Clear any existing UserDefaults
+        // Clear UserDefaults for test isolation
         UserDefaults.standard.removeObject(forKey: "wasAuthenticated")
         UserDefaults.standard.removeObject(forKey: "userEmail")
         UserDefaults.standard.removeObject(forKey: "userName")
         UserDefaults.standard.removeObject(forKey: "biometricEnabled")
     }
-    
     override func tearDownWithError() throws {
         authManager = nil
         // Clean up UserDefaults
@@ -38,41 +35,33 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Initialization Tests
-    
     func testAuthenticationManagerInitialization() {
-        
-        // Then
-        XCTAssertFalse(authManager.isAuthenticated, "Should not be authenticated initially")
-        XCTAssertNil(authManager.authenticationError, "Authentication error should be nil initially")
-        XCTAssertTrue(authManager.errorMessage.isEmpty, "Error message should be empty initially")
-        XCTAssertFalse(authManager.isLoading, "Should not be loading initially")
-        XCTAssertNil(authManager.user, "User should be nil initially")
-        XCTAssertNil(authManager.currentUser, "Current user should be nil initially")
-        XCTAssertFalse(authManager.showBiometricSetupAlert, "Should not show biometric setup alert initially")
+        // Check initial state
+        XCTAssertFalse(authManager.isAuthenticated)
+        XCTAssertNil(authManager.authenticationError)
+        XCTAssertTrue(authManager.errorMessage.isEmpty)
+        XCTAssertFalse(authManager.isLoading)
+        XCTAssertNil(authManager.user)
+        XCTAssertNil(authManager.currentUser)
+        XCTAssertFalse(authManager.showBiometricSetupAlert)
     }
     
     // Sign In Tests
-    
     func testSignInSuccess() {
-        // Given
+        // Simulate valid sign in
         let email = "user@example.com"
         let password = "123456"
         let expectation = expectation(description: "signIn")
-
-        // When
         authManager.signIn(email: email, password: password)
-
-        // Then
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            XCTAssertTrue(self.authManager.isAuthenticated, "Should be authenticated after successful sign in")
-            XCTAssertNil(self.authManager.authenticationError, "Authentication error should be nil after success")
-            XCTAssertNotNil(self.authManager.currentUser, "Current user should not be nil after sign in")
-            XCTAssertEqual(self.authManager.currentUser?.email, email, "User email should match")
-            XCTAssertTrue(UserDefaults.standard.bool(forKey: "wasAuthenticated"), "Should save authentication state")
-            XCTAssertEqual(UserDefaults.standard.string(forKey: "userEmail"), email, "Should save user email")
+            XCTAssertTrue(self.authManager.isAuthenticated)
+            XCTAssertNil(self.authManager.authenticationError)
+            XCTAssertNotNil(self.authManager.currentUser)
+            XCTAssertEqual(self.authManager.currentUser?.email, email)
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: "wasAuthenticated"))
+            XCTAssertEqual(UserDefaults.standard.string(forKey: "userEmail"), email)
             expectation.fulfill()
         }
-
         wait(for: [expectation], timeout: 2.0)
     }
 
@@ -116,34 +105,28 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Sign Up Tests
-    
     func testSignUpSuccess() {
-        // Given
+        // Simulate valid sign up
         let email = "newuser@example.com"
         let password = "password123"
         let name = "Test User"
         let expectation = expectation(description: "signUp")
-
-        // When
         authManager.signUp(email: email, password: password, name: name)
-
-        // Then
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            XCTAssertTrue(self.authManager.isAuthenticated, "Should be authenticated after successful sign up")
-            XCTAssertNotNil(self.authManager.currentUser, "Current user should not be nil after sign up")
-            XCTAssertEqual(self.authManager.currentUser?.email, email, "User email should match")
-            XCTAssertEqual(self.authManager.currentUser?.name, name, "User name should match")
-            XCTAssertTrue(UserDefaults.standard.bool(forKey: "wasAuthenticated"), "Should save authentication state")
+            XCTAssertTrue(self.authManager.isAuthenticated)
+            XCTAssertNotNil(self.authManager.currentUser)
+            XCTAssertEqual(self.authManager.currentUser?.email, email)
+            XCTAssertEqual(self.authManager.currentUser?.name, name)
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: "wasAuthenticated"))
             expectation.fulfill()
         }
-
         wait(for: [expectation], timeout: 2.0)
     }
     
     func testSignUpWithFullNameMethod() {
         // Given
-        let fullName = "John Doe"
-        let email = "john@example.com"
+        let fullName = "sewminiK"
+        let email = "sewminiK@example.com"
         let password = "password123"
         let expectation = expectation(description: "signUpFullName")
 
@@ -181,14 +164,10 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     //  Biometric Authentication Tests
-    
     func testBiometricTypeDetection() {
-        // Given & When
+        // Check biometric type
         let biometricType = authManager.checkBiometricAvailability()
-        
-        // Then
-        XCTAssertTrue([BiometricType.faceID, BiometricType.touchID, BiometricType.none].contains(biometricType), 
-                     "Should return a valid biometric type")
+        XCTAssertTrue([BiometricType.faceID, BiometricType.touchID, BiometricType.none].contains(biometricType))
     }
     
     func testEnableBiometricAuthentication() {
@@ -238,21 +217,16 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // User Data Management Tests
-    
     func testLoadUserFromStorage() {
-        // Given
+        // Simulate loading user from UserDefaults
         let email = "stored@example.com"
         let name = "Stored User"
         UserDefaults.standard.set(email, forKey: "userEmail")
         UserDefaults.standard.set(name, forKey: "userName")
-        
-        // When
         let newAuthManager = AuthenticationManager()
-        
-        // Then
-        XCTAssertNotNil(newAuthManager.user, "Should load user from storage")
-        XCTAssertEqual(newAuthManager.user?.email, email, "Should load correct email")
-        XCTAssertEqual(newAuthManager.user?.name, name, "Should load correct name")
+        XCTAssertNotNil(newAuthManager.user)
+        XCTAssertEqual(newAuthManager.user?.email, email)
+        XCTAssertEqual(newAuthManager.user?.name, name)
     }
     
     func testLoadUserFromStorageWithMissingName() {
@@ -271,7 +245,6 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Biometric Setup Tests
-    
     func testConfirmBiometricSetup() {
         // Given
         authManager.showBiometricSetupAlert = true
@@ -298,24 +271,19 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Logout Tests
-    
     func testLogout() {
-        // Given
+        // Simulate logout
         authManager.isAuthenticated = true
         authManager.user = User(email: "test@example.com", name: "Test")
         authManager.authenticationError = "Some error"
         authManager.errorMessage = "Some message"
         UserDefaults.standard.set(true, forKey: "wasAuthenticated")
-        
-        // When
         authManager.logout()
-        
-        // Then
-        XCTAssertFalse(authManager.isAuthenticated, "Should not be authenticated after logout")
-        XCTAssertNil(authManager.authenticationError, "Authentication error should be nil after logout")
-        XCTAssertTrue(authManager.errorMessage.isEmpty, "Error message should be empty after logout")
-        XCTAssertNil(authManager.user, "User should be nil after logout")
-        XCTAssertFalse(UserDefaults.standard.bool(forKey: "wasAuthenticated"), "Should clear authentication state")
+        XCTAssertFalse(authManager.isAuthenticated)
+        XCTAssertNil(authManager.authenticationError)
+        XCTAssertTrue(authManager.errorMessage.isEmpty)
+        XCTAssertNil(authManager.user)
+        XCTAssertFalse(UserDefaults.standard.bool(forKey: "wasAuthenticated"))
     }
     
     func testSignOut() {
@@ -332,7 +300,6 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // BiometricType Enum Tests
-    
     func testBiometricTypeEnum() {
         // Given & When & Then
         let faceID = BiometricType.faceID
@@ -345,7 +312,6 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Loading State Tests
-    
     func testLoadingStateDuringSignIn() {
         // Given
         let expectation = expectation(description: "loadingState")
@@ -383,7 +349,6 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Edge Cases Tests
-    
     func testSignInWithEmptyCredentials() {
         // Given
         let expectation = expectation(description: "emptyCredentials")
@@ -419,17 +384,13 @@ final class AuthenticationManagerTests: XCTestCase {
     }
     
     // Performance Tests
-    
     func testAuthenticationPerformance() {
         measure {
             let expectation = expectation(description: "authPerformance")
-            
             authManager.signIn(email: "test@example.com", password: "password123")
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                 expectation.fulfill()
             }
-            
             wait(for: [expectation], timeout: 2.0)
         }
     }

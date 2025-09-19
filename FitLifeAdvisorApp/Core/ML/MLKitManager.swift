@@ -8,7 +8,7 @@ import SwiftUI
 import AVFoundation
 import Vision
 
-// MARK: - ML Kit Manager
+//ML Kit Manager
 @MainActor
 class MLKitManager: ObservableObject {
     @Published var isProcessing = false
@@ -18,7 +18,7 @@ class MLKitManager: ObservableObject {
     init() {}
 }
 
-// MARK: - ML Result Types
+// ML Result Types
 enum MLResultType {
     case barcode
     case text
@@ -40,7 +40,7 @@ enum MLKitResult {
     case foodLabel([String])
 }
 
-// MARK: - Data Models
+//  Data Models
 struct PoseData {
     let landmarks: [CGPoint]
     let confidence: Float
@@ -56,7 +56,7 @@ enum ExerciseType {
     case unknown
 }
 
-// MARK: - ML Kit Error Types
+//  ML Kit Error Types
 enum MLKitError: Error {
     case invalidImage
     case processingFailed
@@ -77,15 +77,15 @@ enum MLKitError: Error {
     }
 }
 
-// MARK: - ML Kit Extensions
+//ML Kit Extensions
 extension MLKitManager {
     
-    // MARK: - Barcode Scanning
+    // Barcode Scanning
     func scanBarcode(from image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
         isProcessing = true
         errorMessage = nil
         
-        print("🔍 Starting barcode scan...")
+        print("Starting barcode scan...")
         
         // Create vision request for barcode detection with enhanced symbologies
         let request = VNDetectBarcodesRequest { request, error in
@@ -94,7 +94,7 @@ extension MLKitManager {
                 
                 if let error = error {
                     self.errorMessage = "Barcode scanning failed: \(error.localizedDescription)"
-                    print("❌ Barcode scan error: \(error.localizedDescription)")
+                    print("Barcode scan error: \(error.localizedDescription)")
                     completion(.failure(error))
                     return
                 }
@@ -102,19 +102,19 @@ extension MLKitManager {
                 guard let results = request.results as? [VNBarcodeObservation] else {
                     let error = NSError(domain: "MLKit", code: 1, userInfo: [NSLocalizedDescriptionKey: "No barcode observations found"])
                     self.errorMessage = "No barcode detected in image"
-                    print("❌ No barcode observations found")
+                    print("No barcode observations found")
                     completion(.failure(error))
                     return
                 }
                 
-                print("📊 Found \(results.count) barcode observations")
+                print(" Found \(results.count) barcode observations")
                 
                 // Try to find a valid barcode from all detections
                 for (index, barcode) in results.enumerated() {
                     print("🔍 Barcode \(index + 1): Type = \(barcode.symbology), Confidence = \(barcode.confidence)")
                     
                     if let barcodeString = barcode.payloadStringValue, !barcodeString.isEmpty {
-                        print("✅ Found valid barcode: \(barcodeString)")
+                        print(" Found valid barcode: \(barcodeString)")
                         
                         self.lastResult = MLResult(
                             type: .barcode,
@@ -130,7 +130,7 @@ extension MLKitManager {
                 
                 let error = NSError(domain: "MLKit", code: 1, userInfo: [NSLocalizedDescriptionKey: "No valid barcode payload found"])
                 self.errorMessage = "Could not read barcode data. Please try a clearer image."
-                print("❌ No valid barcode payload found in \(results.count) detections")
+                print(" No valid barcode payload found in \(results.count) detections")
                 completion(.failure(error))
             }
         }
@@ -160,7 +160,7 @@ extension MLKitManager {
         guard let cgImage = image.cgImage else {
             isProcessing = false
             let error = NSError(domain: "MLKit", code: 2, userInfo: [NSLocalizedDescriptionKey: "Invalid image format"])
-            print("❌ Invalid image format")
+            print("Invalid image format")
             completion(.failure(error))
             return
         }
@@ -174,19 +174,19 @@ extension MLKitManager {
                 DispatchQueue.main.async {
                     self.isProcessing = false
                     self.errorMessage = "Image processing failed: \(error.localizedDescription)"
-                    print("❌ Vision processing failed: \(error.localizedDescription)")
+                    print(" Vision processing failed: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }
         }
     }
     
-    // MARK: - Text Recognition
+    // Text Recognition
     func recognizeText(from image: UIImage, completion: @escaping (Result<[String], Error>) -> Void) {
         isProcessing = true
         errorMessage = nil
         
-        print("🔍 Starting text recognition...")
+        print("Starting text recognition...")
         
         let request = VNRecognizeTextRequest { request, error in
             DispatchQueue.main.async {
@@ -194,14 +194,14 @@ extension MLKitManager {
                 
                 if let error = error {
                     self.errorMessage = "Text recognition failed: \(error.localizedDescription)"
-                    print("❌ Text recognition error: \(error.localizedDescription)")
+                    print(" Text recognition error: \(error.localizedDescription)")
                     completion(.failure(error))
                     return
                 }
                 
                 guard let results = request.results as? [VNRecognizedTextObservation] else {
                     let error = NSError(domain: "MLKit", code: 3, userInfo: [NSLocalizedDescriptionKey: "No text found"])
-                    print("❌ No text observations found")
+                    print(" No text observations found")
                     completion(.failure(error))
                     return
                 }
@@ -210,7 +210,7 @@ extension MLKitManager {
                     observation.topCandidates(1).first?.string
                 }.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
                 
-                print("📄 Recognized \(recognizedText.count) text lines:")
+                print(" Recognized \(recognizedText.count) text lines:")
                 for (index, text) in recognizedText.enumerated() {
                     print("  \(index + 1): \(text)")
                 }
@@ -218,7 +218,7 @@ extension MLKitManager {
                 if recognizedText.isEmpty {
                     let error = NSError(domain: "MLKit", code: 3, userInfo: [NSLocalizedDescriptionKey: "No readable text found"])
                     self.errorMessage = "No readable text found in image"
-                    print("❌ No readable text extracted")
+                    print(" No readable text extracted")
                     completion(.failure(error))
                     return
                 }
@@ -242,7 +242,7 @@ extension MLKitManager {
         guard let cgImage = image.cgImage else {
             isProcessing = false
             let error = NSError(domain: "MLKit", code: 2, userInfo: [NSLocalizedDescriptionKey: "Invalid image format"])
-            print("❌ Invalid image format")
+            print(" Invalid image format")
             completion(.failure(error))
             return
         }
@@ -256,16 +256,16 @@ extension MLKitManager {
                 DispatchQueue.main.async {
                     self.isProcessing = false
                     self.errorMessage = "Image processing failed: \(error.localizedDescription)"
-                    print("❌ Vision text processing failed: \(error.localizedDescription)")
+                    print(" Vision text processing failed: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }
         }
     }
     
-    // MARK: - Extract Nutrition Info from Text
+    // Extract Nutrition Info from Text
     func extractNutritionInfo(from text: [String]) -> NutritionInfo {
-        print("🔍 Extracting nutrition from text: \(text.joined(separator: " | "))")
+        print(" Extracting nutrition from text: \(text.joined(separator: " | "))")
         
         var calories: Int?
         var protein: Double?
@@ -327,7 +327,7 @@ extension MLKitManager {
         for (nutrient, nutrientPatterns) in patterns {
             for pattern in nutrientPatterns {
                 if let value = extractNutrientValue(from: fullText, patterns: [pattern]) {
-                    print("✅ Found \(nutrient): \(value)")
+                    print("Found \(nutrient): \(value)")
                     switch nutrient {
                     case "calories":
                         calories = Int(value)
@@ -404,12 +404,12 @@ extension MLKitManager {
             cholesterol: 0
         )
         
-        print("📊 Extracted nutrition: \(result.calories) cal, \(result.carbs)g carbs, \(result.protein)g protein, \(result.fat)g fat")
+        print("Extracted nutrition: \(result.calories) cal, \(result.carbs)g carbs, \(result.protein)g protein, \(result.fat)g fat")
         
         return result
     }
     
-    // MARK: - Helper Methods
+    //  Helper Methods
     private func extractNumber(from text: String) -> Int? {
         let numbers = text.components(separatedBy: CharacterSet.decimalDigits.inverted)
         for number in numbers {
@@ -455,7 +455,7 @@ extension MLKitManager {
         return nil
     }
     
-    // MARK: - Meal Photo Analysis
+    // Meal Photo Analysis
     func analyzeMealPhoto(_ image: UIImage, completion: @escaping (Result<NutritionInfo, Error>) -> Void) {
         guard let cgImage = image.cgImage else {
             completion(.failure(MLKitError.invalidImage))
@@ -688,7 +688,7 @@ extension MLKitManager {
     }
 }
 
-// MARK: - NutritionInfo Extension
+//  NutritionInfo Extension
 extension NutritionInfo {
     static let defaultMeal = NutritionInfo(
         calories: 400,

@@ -2,8 +2,8 @@
 //  MealAnalysisManagerTests.swift
 //  FitLifeAdvisorAppTests
 //
-//  Comprehensive unit tests for MealAnalysisManager
-//
+//  unit tests for MealAnalysisManager
+
 
 import XCTest
 import UIKit
@@ -290,7 +290,7 @@ final class MealAnalysisManagerTests: XCTestCase {
         XCTAssertEqual(result.analysisTime, analysisTime)
     }
     
-    // MARK: - Saved Meal Tests
+    //  Saved Meal Tests
     
     func testSavedMealInitialization() {
         // Given

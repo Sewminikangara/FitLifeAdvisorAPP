@@ -3,7 +3,7 @@
 //  FitLifeAdvisorApp
 //
 //  created by Sewmini 010 on 2025-08-28.
-//
+
 
 import SwiftUI
 
@@ -149,7 +149,6 @@ struct ProfileView: View {
                 Spacer()
                 
                 Button("View Details") {
-                    // TODO: Navigate to detailed progress
                 }
                 .font(.system(size: 13, weight: .medium)) // Smaller button text
                 .foregroundColor(Constants.Colors.primaryBlue)

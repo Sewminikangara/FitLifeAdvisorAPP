@@ -15,11 +15,11 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            // Luxury Background
+            // Background
             LuxuryTheme.Gradients.primaryBackground
                 .ignoresSafeArea()
             
-            // Luxury Tab View
+            // Tab View
             TabView(selection: $selectedTab) {
                 LuxuryDashboardView()
                     .tabItem {
@@ -116,7 +116,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Luxury Notification Banner
+// Notification Banner
 struct LuxuryNotificationBanner: View {
     @State private var showBanner = false
     
@@ -183,7 +183,7 @@ struct LuxuryNotificationBanner: View {
     }
 }
 
-// MARK: - Luxury More View
+// More View
 struct LuxuryMoreView: View {
     var body: some View {
         NavigationView {
@@ -280,7 +280,7 @@ struct LuxuryMoreView: View {
     }
 }
 
-// MARK: - Luxury More Card
+//  More Card
 struct LuxuryMoreCard: View {
     let title: String
     let subtitle: String

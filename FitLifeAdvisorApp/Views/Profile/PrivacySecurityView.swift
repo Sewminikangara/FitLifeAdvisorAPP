@@ -3,7 +3,7 @@
 //  FitLifeAdvisorApp
 //
 //  Privacy and Security Settings
-//
+
 
 import SwiftUI
 

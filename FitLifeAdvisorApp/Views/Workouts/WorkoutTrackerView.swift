@@ -2,8 +2,10 @@
 //  WorkoutTrackerView.swift
 //  FitLifeAdvisorApp
 //
-//  Advanced AI-powered workout tracking interface
 //
+
+
+//AI-powered workout tracking interface
 
 import SwiftUI
 

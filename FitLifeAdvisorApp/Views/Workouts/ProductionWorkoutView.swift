@@ -2,9 +2,11 @@
 //  ProductionWorkoutView.swift
 //  FitLifeAdvisorApp
 //
-//  Created by FitLife Team on 11/09/2025.
-//  Production-Ready Workout View with Real GPS, Timer & HealthKit
-//
+//  Created by sewmini010 on 11/09/2025.
+
+
+
+//   Workout View with Real GPS, Timer & HealthKit
 
 import SwiftUI
 import HealthKit
@@ -84,7 +86,7 @@ struct ProductionWorkoutView: View {
         }
     }
     
-    // MARK: - View Components
+    //View Components
     
     private var workoutNavigationHeader: some View {
         HStack {
@@ -150,7 +152,7 @@ struct ProductionWorkoutView: View {
     private var recommendationsSection: some View {
         VStack(spacing: 16) {
             HStack {
-                Text("🤖 AI Recommendations")
+                Text(" AI Recommendations")
                     .font(.title2.bold())
                     .foregroundColor(.white)
                 Spacer()
@@ -225,13 +227,13 @@ struct ProductionWorkoutView: View {
         }
     }
     
-    // MARK: - Helper Properties
+    //  Helper Properties
     
     private var popularWorkoutTypes: [HKWorkoutActivityType] {
         [.running, .walking, .cycling, .functionalStrengthTraining, .yoga, .swimming]
     }
     
-    // MARK: - Actions
+    //Actions
     
     private func setupView() {
         Task {
@@ -280,7 +282,7 @@ struct ProductionWorkoutView: View {
     }
 }
 
-// MARK: - Supporting Views
+// Supporting Views
 
 struct WorkoutTypeCard: View {
     let workoutType: HKWorkoutActivityType
@@ -776,7 +778,7 @@ struct WorkoutCompletionView: View {
     }
 }
 
-// MARK: - Extensions
+// Extensions
 
 extension WorkoutState {
     var description: String {
@@ -791,7 +793,7 @@ extension WorkoutState {
     }
 }
 
-// MARK: - Helper Functions
+//  Helper Functions
 
 private func formatDuration(_ duration: TimeInterval) -> String {
     let hours = Int(duration) / 3600

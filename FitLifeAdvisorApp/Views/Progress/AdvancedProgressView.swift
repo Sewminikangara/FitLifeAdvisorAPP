@@ -2,8 +2,8 @@
 //  AdvancedProgressView.swift
 //  FitLifeAdvisorApp
 //
-//  Comprehensive health analytics and progress tracking
-//
+//   health analytics and progress tracking
+
 
 import SwiftUI
 

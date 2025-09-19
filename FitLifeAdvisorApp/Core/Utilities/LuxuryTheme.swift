@@ -2,15 +2,12 @@
 //  LuxuryTheme.swift
 //  FitLifeAdvisorApp
 //
-//  Luxury Design System for the entire app
-//
+
 
 import SwiftUI
 
-// MARK: - Luxury Theme Manager
 struct LuxuryTheme {
     
-    // MARK: - Color Palette
     struct Colors {
         // Background Colors
         static let primaryBackground = Color(hex: "0A0A0A")
@@ -46,7 +43,7 @@ struct LuxuryTheme {
         static let glassBackground = Color.white.opacity(0.05)
     }
     
-    // MARK: - Typography
+    // Typography
     struct Typography {
         static let largeTitle = Font.system(size: 36, weight: .bold)
         static let title1 = Font.system(size: 28, weight: .bold)
@@ -59,7 +56,7 @@ struct LuxuryTheme {
         static let caption2 = Font.system(size: 10, weight: .medium)
     }
     
-    // MARK: - Spacing
+    // Spacing
     struct Spacing {
         static let xxxSmall: CGFloat = 4
         static let xxSmall: CGFloat = 8
@@ -72,7 +69,7 @@ struct LuxuryTheme {
         static let xxxLarge: CGFloat = 48
     }
     
-    // MARK: - Corner Radius
+    //  Corner Radius
     struct CornerRadius {
         static let small: CGFloat = 8
         static let medium: CGFloat = 12
@@ -81,7 +78,7 @@ struct LuxuryTheme {
         static let xxLarge: CGFloat = 24
     }
     
-    // MARK: - Shadow
+    // Shadow
     struct Shadow {
         static let soft = Color.black.opacity(0.1)
         static let medium = Color.black.opacity(0.2)
@@ -90,7 +87,6 @@ struct LuxuryTheme {
     }
 }
 
-// MARK: - Luxury Background Views
 extension View {
     func luxuryBackground() -> some View {
         self.background(
@@ -153,7 +149,6 @@ extension View {
     }
 }
 
-// MARK: - Luxury Button Styles
 struct LuxuryButtonStyle: ButtonStyle {
     let colors: [Color]
     let cornerRadius: CGFloat
@@ -207,7 +202,6 @@ struct LuxuryGhostButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Luxury Text Field Style
 struct LuxuryTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
@@ -225,7 +219,6 @@ struct LuxuryTextFieldStyle: TextFieldStyle {
     }
 }
 
-// MARK: - Luxury Navigation Style
 struct LuxuryNavigationStyle: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 16.0, *) {
@@ -248,7 +241,6 @@ extension View {
     }
 }
 
-// MARK: - Luxury Tab View Style
 struct LuxuryTabViewStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -273,7 +265,6 @@ extension View {
     }
 }
 
-// MARK: - Gradient Helpers
 extension LuxuryTheme {
     struct Gradients {
         static let primaryBackground = LinearGradient(

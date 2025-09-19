@@ -2,8 +2,8 @@
 //  MLKitManagerTests.swift
 //  FitLifeAdvisorAppTests
 //
-//  Comprehensive unit tests for MLKitManager
-//
+//   unit tests for MLKitManager
+
 
 import XCTest
 import Vision
@@ -13,10 +13,9 @@ import UIKit
 @MainActor
 final class MLKitManagerTests: XCTestCase {
     
-    // MARK: - Test Properties
     var mlKitManager: MLKitManager!
     
-    // MARK: - Setup & Teardown
+    //  Setup & Teardown
     
     override func setUpWithError() throws {
         super.setUp()
@@ -28,7 +27,7 @@ final class MLKitManagerTests: XCTestCase {
         super.tearDown()
     }
     
-    // MARK: - Initialization Tests
+    // Initialization Tests
     
     func testMLKitManagerInitialization() {
         // Given & When - MLKitManager is initialized in setup
@@ -39,7 +38,7 @@ final class MLKitManagerTests: XCTestCase {
         XCTAssertNil(mlKitManager.errorMessage, "Error message should be nil initially")
     }
     
-    // MARK: - Data Model Tests
+    // Data Model Tests
     
     func testMLResultCreation() {
         // Given
@@ -89,7 +88,7 @@ final class MLKitManagerTests: XCTestCase {
         XCTAssertEqual(poseData.formScore, formScore)
     }
     
-    // MARK: - Exercise Type Tests
+    // Exercise Type Tests
     
     func testExerciseTypeEnumValues() {
         // Given & When & Then
@@ -103,7 +102,7 @@ final class MLKitManagerTests: XCTestCase {
         XCTAssertTrue(exerciseTypes.contains(.unknown))
     }
     
-    // MARK: - Error Handling Tests
+    // error Handling Tests
     
     func testMLKitErrorTypes() {
         // Given & When
@@ -119,7 +118,7 @@ final class MLKitManagerTests: XCTestCase {
         XCTAssertEqual(permissionDeniedError.localizedDescription, "Camera or photo library permission denied")
     }
     
-    // MARK: - Image Processing Tests
+    //  Image Processing Tests
     
     func testCreateTestImage() {
         // Given

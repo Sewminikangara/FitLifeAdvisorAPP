@@ -6,7 +6,6 @@
 import SwiftUI
 
 struct Constants {
-    // MARK: - Colors
     struct Colors {
         static let primaryBlue = Color(hex: "4A90E2")
         static let successGreen = Color(hex: "7ED321")
@@ -20,7 +19,7 @@ struct Constants {
         static let cardBackground = Color.white
     }
     
-    // MARK: - Typography
+    // Typography
     struct Typography {
         static let largeTitle = Font.system(size: 32, weight: .bold, design: .default)
         static let title = Font.system(size: 24, weight: .bold, design: .default)
@@ -31,7 +30,7 @@ struct Constants {
         static let small = Font.system(size: 12, weight: .regular, design: .default)
     }
     
-    // MARK: - Spacing
+    // Spacing
     struct Spacing {
         static let small: CGFloat = 8
         static let medium: CGFloat = 16
@@ -39,7 +38,7 @@ struct Constants {
         static let extraLarge: CGFloat = 32
     }
     
-    // MARK: - Corner Radius
+    //  Corner Radius
     static let cornerRadius: CGFloat = 16
     static let smallCornerRadius: CGFloat = 12
 }

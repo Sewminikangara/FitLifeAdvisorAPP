@@ -2,8 +2,10 @@
 //  RecipeDiscoveryView.swift
 //  FitLifeAdvisorApp
 //
-//  AI-powered recipe discovery and meal planning
 //
+
+//AI-powered recipe discovery and meal planning
+
 
 import SwiftUI
 

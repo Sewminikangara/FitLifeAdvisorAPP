@@ -2,8 +2,8 @@
 //  FaceIDSimulatorGuide.swift
 //  FitLifeAdvisorApp
 //
-//  Face ID Simulator Setup and Testing Guide
-//
+//  Face ID Simulator Setup and Testing 
+
 
 import SwiftUI
 import LocalAuthentication

@@ -71,7 +71,7 @@ struct LuxuryForgotPasswordView: View {
         }
     }
     
-    // MARK: - Header Section
+    // Header Section
     private var luxuryHeaderSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.large) {
             // Lock Icon
@@ -102,7 +102,7 @@ struct LuxuryForgotPasswordView: View {
         }
     }
     
-    // MARK: - Reset Form
+    // Reset Form
     private var luxuryResetForm: some View {
         VStack(spacing: LuxuryTheme.Spacing.large) {
             // Instructions
@@ -178,7 +178,7 @@ struct LuxuryForgotPasswordView: View {
         }
     }
     
-    // MARK: - Success Section
+    // Success Section
     private var luxurySuccessSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.large) {
             // Success Message Card
@@ -219,7 +219,7 @@ struct LuxuryForgotPasswordView: View {
         }
     }
     
-    // MARK: - Back Section
+    // Back Section
     private var luxuryBackSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             Text(showSuccessMessage ? "Remember your password?" : "Remember your password?")
@@ -241,7 +241,7 @@ struct LuxuryForgotPasswordView: View {
         }
     }
     
-    // MARK: - Helper Functions
+    // Helper Functions
     private func startAnimations() {
         withAnimation(.spring(response: 0.8, dampingFraction: 0.8)) {
             animateElements = true

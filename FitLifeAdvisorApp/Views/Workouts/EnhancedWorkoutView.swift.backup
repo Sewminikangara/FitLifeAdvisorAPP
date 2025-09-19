@@ -2,7 +2,6 @@
 //  EnhancedWorkoutView.swift
 //  FitLifeAdvisorApp
 //
-//  Redesigned Workout Tab with HealthKit Integration & Meal-Workout Synergy
 
 
 import SwiftUI
@@ -36,18 +35,16 @@ struct EnhancedWorkoutView: View {
         }
     }
     
-    var body: some View {
+    
+    some View {
         NavigationView {
             ZStack {
-                // Luxury Background
                 LuxuryTheme.Gradients.primaryBackground
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // Custom Tab Selector
                     customTabSelector
                 
-                // Main Content
                 ScrollView {
                     LazyVStack(spacing: LuxuryTheme.Spacing.large) {
                         switch selectedTab {

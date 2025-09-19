@@ -30,7 +30,6 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
-            // Your existing app views go here
             ContentView()
                 .tabItem {
                     Image(systemName: "house")

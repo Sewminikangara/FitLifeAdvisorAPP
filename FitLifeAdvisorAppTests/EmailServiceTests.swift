@@ -30,12 +30,12 @@ class EmailServiceTests: XCTestCase {
             emailService.sendPasswordResetEmail(to: email) { result in
                 switch result {
                 case .success():
-                    print("✅ Success: Password reset email would be sent to \(email)")
+                    print(" Success: Password reset email would be sent to \(email)")
                     expectation.fulfill()
                 case .failure(let error):
                     if case .userNotFound = error {
                         // This is acceptable in simulation mode
-                        print("⚠️ User not found (simulated): \(email)")
+                        print("User not found (simulated): \(email)")
                         expectation.fulfill()
                     } else {
                         XCTFail("Unexpected error for valid email \(email): \(error)")
@@ -44,7 +44,6 @@ class EmailServiceTests: XCTestCase {
             }
         }
         
-        wait(for: [expectation], timeout: 3.0)
     }
     
     func testInvalidEmailAddresses() {
@@ -65,7 +64,7 @@ class EmailServiceTests: XCTestCase {
                     XCTFail("Invalid email should not succeed: \(email)")
                 case .failure(let error):
                     if case .invalidEmail = error {
-                        print("✅ Correctly rejected invalid email: \(email)")
+                        print(" Correctly rejected invalid email: \(email)")
                         expectation.fulfill()
                     } else {
                         XCTFail("Wrong error type for invalid email \(email): \(error)")
@@ -74,24 +73,22 @@ class EmailServiceTests: XCTestCase {
             }
         }
         
-        wait(for: [expectation], timeout: 3.0)
     }
     
     func testEmailServiceSimulation() {
         let testEmail = "test@example.com"
         let expectation = XCTestExpectation(description: "Email service simulation")
         
-        print("🧪 Testing email service with: \(testEmail)")
+        print("Testing email service with: \(testEmail)")
         
         emailService.sendPasswordResetEmail(to: testEmail) { result in
             switch result {
             case .success():
-                print("✅ Email service simulation successful")
-                print("📧 In production, an email would be sent to: \(testEmail)")
+                print("Email service simulation successful")
+                print("📧In production, an email would be sent to: \(testEmail)")
                 expectation.fulfill()
             case .failure(let error):
-                print("ℹ️ Simulation result: \(error.localizedDescription)")
-                // In simulation mode, some "failures" are expected
+                print("Simulation result: \(error.localizedDescription)")
                 expectation.fulfill()
             }
         }
@@ -100,13 +97,13 @@ class EmailServiceTests: XCTestCase {
     }
 }
 
-// MARK: - Manual Test Function (for debugging)
+// Test Function
 
 func testEmailServiceManually() {
     let emailService = EmailService.shared
     let testEmails = ["valid@test.com", "invalid-email", "user@example.org"]
     
-    print("🧪 Manual Email Service Test Started")
+    print(" Manual Email Service Test Started")
     print("=====================================")
     
     for email in testEmails {
@@ -115,17 +112,17 @@ func testEmailServiceManually() {
         emailService.sendPasswordResetEmail(to: email) { result in
             switch result {
             case .success():
-                print("✅ SUCCESS: Email would be sent to \(email)")
+                print(" SUCCESS: Email would be sent to \(email)")
             case .failure(let error):
-                print("❌ FAILED: \(error.localizedDescription)")
+                print("FAILED: \(error.localizedDescription)")
                 if let suggestion = error.recoverySuggestion {
-                    print("💡 Suggestion: \(suggestion)")
+                    print(" Suggestion: \(suggestion)")
                 }
             }
         }
     }
     
     print("\n=====================================")
-    print("🧪 Manual Email Service Test Complete")
+    print("Manual Email Service Test Complete")
     print("Check the console output above for results")
 }

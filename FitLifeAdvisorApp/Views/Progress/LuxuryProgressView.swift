@@ -2,8 +2,8 @@
 //  LuxuryProgressView.swift
 //  FitLifeAdvisorApp
 //
-//  Luxury Progress View with premium design
-//
+//   Progress View with premium design
+
 
 import SwiftUI
 
@@ -137,7 +137,7 @@ struct LuxuryProgressView: View {
         }
     }
     
-    // MARK: - Luxury Header
+    // Header
     private var luxuryHeaderSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             HStack {
@@ -211,7 +211,7 @@ struct LuxuryProgressView: View {
         }
     }
     
-    // MARK: - Selector Section
+    // Selector Section
     private var selectorSection: some View {
         VStack(spacing: LuxuryTheme.Spacing.medium) {
             // Time Frame Selector

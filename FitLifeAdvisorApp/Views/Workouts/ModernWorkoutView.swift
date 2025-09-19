@@ -2,8 +2,7 @@
 //  ModernWorkoutView.swift
 //  FitLifeAdvisorApp
 //
-//  Modern Workout Discovery with beautiful UI and enhanced user experience
-//
+//   Workout Discovery
 
 import SwiftUI
 
@@ -120,12 +119,12 @@ struct ModernWorkoutView: View {
         }
     }
     
-    // MARK: - Modern Header Section
+    // Header Section
     private var modernHeaderSection: some View {
         VStack(spacing: Constants.Spacing.medium) {
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Ready to Sweat? 💪")
+                    Text("Ready to Sweat? ")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundColor(Constants.Colors.textDark)
                     
@@ -193,7 +192,7 @@ struct ModernWorkoutView: View {
         .padding(.horizontal, Constants.Spacing.large)
     }
     
-    // MARK: - Modern Search Section
+    // Search Section
     private var modernSearchSection: some View {
         HStack(spacing: Constants.Spacing.medium) {
             HStack {
@@ -231,7 +230,7 @@ struct ModernWorkoutView: View {
         .padding(.horizontal, Constants.Spacing.large)
     }
     
-    // MARK: - Category Filter Section
+    // Category Filter Section
     private var categoryFilterSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: Constants.Spacing.medium) {
@@ -250,7 +249,7 @@ struct ModernWorkoutView: View {
         }
     }
     
-    // MARK: - Featured Workout Section
+    //  Featured Workout Section
     private var featuredWorkoutSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             HStack {
@@ -276,7 +275,7 @@ struct ModernWorkoutView: View {
         }
     }
     
-    // MARK: - Quick Start Section
+    // Quick Start Section
     private var quickStartSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             Text("Quick Start (5-15 min)")
@@ -323,7 +322,7 @@ struct ModernWorkoutView: View {
         }
     }
     
-    // MARK: - Workout Categories Section
+    // orkout Categories Section
     private var workoutCategoriesSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             Text("Browse Categories")
@@ -368,7 +367,7 @@ struct ModernWorkoutView: View {
         }
     }
     
-    // MARK: - Popular Workouts Section
+    // Popular Workouts Section
     private var popularWorkoutsSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             HStack {
@@ -378,7 +377,7 @@ struct ModernWorkoutView: View {
                 
                 Spacer()
                 
-                Text("🔥 Trending")
+                Text(" Trending")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(Constants.Colors.warningOrange)
             }
@@ -419,7 +418,7 @@ struct ModernWorkoutView: View {
         }
     }
     
-    // MARK: - Personal Recommendations
+    //  Personal Recommendations
     private var personalRecommendationsSection: some View {
         VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             HStack {
@@ -473,7 +472,7 @@ struct ModernWorkoutView: View {
     }
 }
 
-// MARK: - Supporting Components
+//Supporting Components
 
 struct StatBadge: View {
     let icon: String
@@ -880,7 +879,7 @@ struct WorkoutRecommendationCard: View {
     }
 }
 
-// MARK: - Supporting Views for Sheets
+// Supporting Views for Sheets
 struct WorkoutDetailView: View {
     let workout: WorkoutPlan
     
@@ -930,7 +929,7 @@ struct Exercise: Identifiable {
     let sets: Int?
 }
 
-// MARK: - Feature Row Component
+// Feature Row Component
 struct FeatureRow: View {
     let icon: String
     let text: String

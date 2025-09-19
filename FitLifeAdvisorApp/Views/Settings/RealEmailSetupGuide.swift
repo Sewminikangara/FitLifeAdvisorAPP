@@ -2,7 +2,6 @@
 //  RealEmailSetupGuide.swift
 //  FitLifeAdvisorApp
 //
-//  Step-by-step guide to enable REAL email sending
 //
 
 import SwiftUI

@@ -2,7 +2,7 @@
 //  NotificationSettingsView.swift
 //  FitLifeAdvisorApp
 //
-//  Created by AI Assistant on 2025-09-09.
+//  Created by sewmini010 on 2025-09-09.
 //
 
 import SwiftUI

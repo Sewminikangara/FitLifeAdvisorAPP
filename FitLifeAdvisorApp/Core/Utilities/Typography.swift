@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Typography {
-    // MARK: - Font Styles
+    //  Font Styles
     static let largeTitle = Font.system(size: 32, weight: .bold, design: .default)
     static let title = Font.system(size: 24, weight: .bold, design: .default)
     static let headline = Font.system(size: 20, weight: .medium, design: .default)
@@ -16,7 +16,7 @@ struct Typography {
     static let caption = Font.system(size: 14, weight: .regular, design: .default)
     static let small = Font.system(size: 12, weight: .regular, design: .default)
     
-    // MARK: - Font Weights
+    // Font Weights
     enum Weight {
         case regular
         case medium
@@ -34,7 +34,7 @@ struct Typography {
     }
 }
 
-// MARK: - Usage Examples in Preview
+// Usage Examples in Preview
 struct TypographyPreview: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {

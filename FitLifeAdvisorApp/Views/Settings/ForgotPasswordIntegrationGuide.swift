@@ -2,8 +2,8 @@
 //  ForgotPasswordIntegrationGuide.swift
 //  FitLifeAdvisorApp
 //
-//  Guide for integrating real email services for password reset functionality
-//
+//  integrating  email services for password reset functionality
+
 
 import SwiftUI
 

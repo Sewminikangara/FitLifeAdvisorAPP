@@ -3,7 +3,7 @@
 //  FitLifeAdvisorApp
 //
 //  Test view to demonstrate dark mode functionality
-//
+
 
 import SwiftUI
 

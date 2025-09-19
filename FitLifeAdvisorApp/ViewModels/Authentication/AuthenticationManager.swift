@@ -25,7 +25,7 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
-    // MARK: - Traditional Authentication Methods
+    // Traditional Authentication Methods
     
     func signIn(email: String, password: String) {
         isLoading = true
@@ -77,7 +77,7 @@ class AuthenticationManager: ObservableObject {
         signUp(email: email, password: password, name: fullName)
     }
     
-    // MARK: - Biometric Authentication Methods
+    // Biometric Authentication Methods
     
     func checkBiometricAvailability() -> BiometricType {
         var error: NSError?
@@ -184,7 +184,7 @@ class AuthenticationManager: ObservableObject {
         return enabled && available
     }
     
-    // MARK: - Helper Methods
+    // Helper Methods
     
     private func loadUserFromStorage() {
         if let email = UserDefaults.standard.string(forKey: "userEmail") {

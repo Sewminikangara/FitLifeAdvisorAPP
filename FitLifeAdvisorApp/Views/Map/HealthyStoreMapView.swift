@@ -2,8 +2,9 @@
 //  HealthyStoreMapView.swift
 //  FitLifeAdvisorApp
 //
-//  Modern MapKit integration for finding healthy food stores and gyms
-//
+
+// MapKit integration for finding healthy food stores and gyms
+
 
 import SwiftUI
 import MapKit
